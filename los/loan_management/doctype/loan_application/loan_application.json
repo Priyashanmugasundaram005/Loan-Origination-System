@@ -1,0 +1,330 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-03-23 12:10:18.687924",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "bank_details_section",
+  "bank_name",
+  "branch_name",
+  "applicant_details_section",
+  "applicant_id",
+  "applicant_name",
+  "applicant_address",
+  "occupation",
+  "column_break_tfew",
+  "account_number",
+  "applicant_email",
+  "applicant_salary",
+  "credit_score",
+  "amended_from",
+  "loan_product_details_section",
+  "loan_product",
+  "loan_category_type",
+  "interest_rate",
+  "tenure",
+  "column_break_ojsl",
+  "eligible",
+  "loan_status",
+  "requesting_amount",
+  "sanction_amount",
+  "joint_applicants_details_section",
+  "joint_applicants",
+  "nominee_details_section",
+  "nominees",
+  "primary_securities_section",
+  "security_type",
+  "security_description",
+  "column_break_hbki",
+  "estimated_value",
+  "document_proofs",
+  "section_break_jygn",
+  "loan_process_status",
+  "loan_sanction_date"
+ ],
+ "fields": [
+  {
+   "fieldname": "bank_details_section",
+   "fieldtype": "Section Break",
+   "label": "Bank Details"
+  },
+  {
+   "fieldname": "bank_name",
+   "fieldtype": "Link",
+   "label": "Bank Name",
+   "options": "Bank"
+  },
+  {
+   "fieldname": "branch_name",
+   "fieldtype": "Link",
+   "label": "Branch Name",
+   "options": "Branch"
+  },
+  {
+   "fieldname": "applicant_details_section",
+   "fieldtype": "Section Break",
+   "label": "Applicant Details"
+  },
+  {
+   "fetch_from": "applicant_id.customer_name",
+   "fieldname": "applicant_name",
+   "fieldtype": "Data",
+   "label": "Applicant Name"
+  },
+  {
+   "fetch_from": "applicant_id.address",
+   "fieldname": "applicant_address",
+   "fieldtype": "Small Text",
+   "label": "Applicant Address"
+  },
+  {
+   "fieldname": "column_break_tfew",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "applicant_id.account_number",
+   "fieldname": "account_number",
+   "fieldtype": "Int",
+   "label": "Account Number"
+  },
+  {
+   "fetch_from": "applicant_id.customer_email",
+   "fieldname": "applicant_email",
+   "fieldtype": "Data",
+   "label": "Applicant Email"
+  },
+  {
+   "fetch_from": "applicant_name.salary",
+   "fieldname": "applicant_salary",
+   "fieldtype": "Currency",
+   "label": "Applicant Salary"
+  },
+  {
+   "fetch_from": "applicant_id.credit_score",
+   "fieldname": "credit_score",
+   "fieldtype": "Int",
+   "label": "Credit score"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Loan Application",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "applicant_id",
+   "fieldtype": "Link",
+   "label": "Applicant ID",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "loan_product_details_section",
+   "fieldtype": "Section Break",
+   "label": "Loan Product Details"
+  },
+  {
+   "fetch_from": "loan_product.category_name",
+   "fieldname": "loan_category_type",
+   "fieldtype": "Data",
+   "label": "Loan Category Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "joint_applicants_details_section",
+   "fieldtype": "Section Break",
+   "label": "Joint Applicants Details"
+  },
+  {
+   "fieldname": "joint_applicants",
+   "fieldtype": "Table",
+   "label": "Joint Applicants",
+   "options": "Joint Applicants Table"
+  },
+  {
+   "fieldname": "nominee_details_section",
+   "fieldtype": "Section Break",
+   "label": "Nominee Details"
+  },
+  {
+   "fieldname": "nominees",
+   "fieldtype": "Table",
+   "label": "Nominees",
+   "options": "Nominee Table"
+  },
+  {
+   "fieldname": "loan_product",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Loan Product",
+   "options": "Loan Product",
+   "reqd": 1
+  },
+  {
+   "fieldname": "interest_rate",
+   "fieldtype": "Percent",
+   "in_list_view": 1,
+   "label": "Interest Rate",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "loan_product.min_tenure",
+   "fieldname": "tenure",
+   "fieldtype": "Int",
+   "label": "Tenure"
+  },
+  {
+   "fieldname": "column_break_ojsl",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "eligible",
+   "fieldtype": "Check",
+   "label": "Eligible"
+  },
+  {
+   "allow_on_submit": 1,
+   "default": "Active",
+   "fieldname": "loan_status",
+   "fieldtype": "Select",
+   "label": "Loan Status",
+   "options": "Active\nClosed",
+   "read_only": 1
+  },
+  {
+   "fieldname": "requesting_amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Requesting Amount",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "sanction_amount",
+   "fieldtype": "Currency",
+   "label": "Sanction Amount",
+   "read_only_depends_on": "eval:doc.loan_process_status!='Sanctioned'"
+  },
+  {
+   "fieldname": "primary_securities_section",
+   "fieldtype": "Section Break",
+   "label": "Primary Securities"
+  },
+  {
+   "fieldname": "security_type",
+   "fieldtype": "Select",
+   "label": "Security Type",
+   "options": "None\nProperty\nVehicle\nGold\nFixed Deposit\nShares\nOther"
+  },
+  {
+   "fieldname": "security_description",
+   "fieldtype": "Small Text",
+   "label": "Security Description"
+  },
+  {
+   "fieldname": "document_proofs",
+   "fieldtype": "Attach",
+   "label": "Document Proofs"
+  },
+  {
+   "fieldname": "estimated_value",
+   "fieldtype": "Currency",
+   "label": "Estimated Value ",
+   "mandatory_depends_on": "eval: doc.security_type!='None'"
+  },
+  {
+   "fieldname": "column_break_hbki",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_jygn",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "loan_process_status",
+   "fieldtype": "Select",
+   "label": "Loan Process Status",
+   "options": "Draft\nPending Verification\nVerified\nSanctioned\nDisbursed\nClosed\nRejected"
+  },
+  {
+   "fieldname": "loan_sanction_date",
+   "fieldtype": "Date",
+   "label": "Loan Sanction Date"
+  },
+  {
+   "fetch_from": "applicant_id.occupation",
+   "fieldname": "occupation",
+   "fieldtype": "Select",
+   "label": "Occupation"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-03-23 18:08:25.928198",
+ "modified_by": "Administrator",
+ "module": "Loan Management",
+ "name": "Loan Application",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Checker",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Maker",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sanctioner",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

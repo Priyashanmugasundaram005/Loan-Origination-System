@@ -1,0 +1,63 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-03-23 12:31:52.818340",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "nominee_name",
+  "relation",
+  "phone_number",
+  "nominee_email",
+  "address",
+  "share_percent"
+ ],
+ "fields": [
+  {
+   "fieldname": "nominee_name",
+   "fieldtype": "Data",
+   "label": "Nominee Name"
+  },
+  {
+   "fieldname": "relation",
+   "fieldtype": "Select",
+   "label": "Relation",
+   "options": "Father\nMother\nSpouse\nSon\nDaughter\nBrother\nSister\nOther"
+  },
+  {
+   "fieldname": "phone_number",
+   "fieldtype": "Phone",
+   "label": "Phone Number"
+  },
+  {
+   "fieldname": "nominee_email",
+   "fieldtype": "Data",
+   "label": "Nominee Email"
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Data",
+   "label": "Address"
+  },
+  {
+   "fieldname": "share_percent",
+   "fieldtype": "Percent",
+   "label": "Share Percent"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-03-23 12:45:38.875459",
+ "modified_by": "Administrator",
+ "module": "Loan Management",
+ "name": "Nominee Table",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
