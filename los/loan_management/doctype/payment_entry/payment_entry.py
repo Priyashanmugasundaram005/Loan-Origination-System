@@ -13,7 +13,12 @@ class PaymentEntry(Document):
 
 	def on_submit(self):
 		if self.payment_type=='EMI':
-			self.emi_amount_validation()
+			rappe.enqueue(
+            method="los.loan_management.doctype.payment_entry.payment_entry.emi_amount_validation",
+            queue="long",
+            timeout=600,
+            doc_name=self.name
+        )
 		
 		if self.payment_type=='Principal':
 			self.principal_amount_validation()
@@ -22,16 +27,17 @@ class PaymentEntry(Document):
 
 
 
-	def emi_amount_validation(self):
-		emi_doc=frappe.get_doc('EMI',{'loan_application_id':self.loan_application_id})
+	def emi_amount_validation(doc_name):
+		doc=frappe.get_doc("Payment_entry",doc_name)
+		emi_doc=frappe.get_doc('EMI',{'loan_application_id':doc.loan_application_id})
 		
 		months_comp=emi_doc.payment_completed_months+1
 		principal=emi_doc.principal_amount
 
-		if self.emi_for_this_month<self.payment_amount:
-			extra_amount=self.payment_amount-self.emi_for_this_month
+		if doc.emi_for_this_month<doc.payment_amount:
+			extra_amount=doc.payment_amount-doc.emi_for_this_month
 			principal=emi_doc.principal_amount-extra_amount
-		tenure,interest_rate=frappe.get_value("Loan Application",self.loan_application_id,['tenure','interest_rate'])
+		tenure,interest_rate=frappe.get_value("Loan Application",doc.loan_application_id,['tenure','interest_rate'])
 		frappe.log_error("ten",tenure)
 		N=tenure*12
 		pending_months=N-months_comp	
@@ -44,7 +50,7 @@ class PaymentEntry(Document):
 
 		emi=round(emi,2)
 		total_emi=emi* pending_months
-		total_paid=emi_doc.amount_paid+self.payment_amount
+		total_paid=emi_doc.amount_paid+doc.payment_amount
 
 		if principal==0:
 			emi_doc.db_set('emi_status','Closed')
@@ -61,7 +67,7 @@ class PaymentEntry(Document):
 			'amount_paid':total_paid,
 			'paid':1
 		})
-		
+
 
 	def principal_amount_validation(self):
 		emi_doc=frappe.get_doc('EMI',{'loan_application_id':self.loan_application_id})
