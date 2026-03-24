@@ -41,7 +41,8 @@
   "document_proofs",
   "section_break_jygn",
   "loan_process_status",
-  "loan_sanction_date"
+  "loan_disbursement_date",
+  "reason_for_rejection"
  ],
  "fields": [
   {
@@ -85,20 +86,22 @@
   {
    "fetch_from": "applicant_id.account_number",
    "fieldname": "account_number",
-   "fieldtype": "Int",
+   "fieldtype": "Data",
    "label": "Account Number"
   },
   {
    "fetch_from": "applicant_id.customer_email",
    "fieldname": "applicant_email",
    "fieldtype": "Data",
-   "label": "Applicant Email"
+   "label": "Applicant Email",
+   "options": "Email"
   },
   {
    "fetch_from": "applicant_name.salary",
    "fieldname": "applicant_salary",
    "fieldtype": "Currency",
-   "label": "Applicant Salary"
+   "label": "Applicant Salary",
+   "length": 18
   },
   {
    "fetch_from": "applicant_id.credit_score",
@@ -172,6 +175,7 @@
    "reqd": 1
   },
   {
+   "description": "Set Tenure in years",
    "fetch_from": "loan_product.min_tenure",
    "fieldname": "tenure",
    "fieldtype": "Int",
@@ -208,7 +212,7 @@
    "fieldname": "sanction_amount",
    "fieldtype": "Currency",
    "label": "Sanction Amount",
-   "read_only_depends_on": "eval:doc.loan_process_status!='Sanctioned'"
+   "read_only_depends_on": "eval:doc.loan_process_status!='Verified'"
   },
   {
    "fieldname": "primary_securities_section",
@@ -252,22 +256,38 @@
    "options": "Draft\nPending Verification\nVerified\nSanctioned\nDisbursed\nClosed\nRejected"
   },
   {
-   "fieldname": "loan_sanction_date",
-   "fieldtype": "Date",
-   "label": "Loan Sanction Date"
-  },
-  {
    "fetch_from": "applicant_id.occupation",
    "fieldname": "occupation",
    "fieldtype": "Select",
-   "label": "Occupation"
+   "label": "Occupation",
+   "options": "Salaried\nSelf-Employed\nProfessional\nAgricultural\nRetired\nStudent\nUnemployed\nOther"
+  },
+  {
+   "fieldname": "reason_for_rejection",
+   "fieldtype": "Small Text",
+   "label": "Reason For Rejection",
+   "read_only_depends_on": "eval:doc.loan_process_status != \"Pending Verification\" || doc.loan_process_status != \"Verified\""
+  },
+  {
+   "fieldname": "loan_disbursement_date",
+   "fieldtype": "Date",
+   "label": "Loan Disbursement Date"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
- "links": [],
- "modified": "2026-03-23 18:08:25.928198",
+ "links": [
+  {
+   "link_doctype": "EMI",
+   "link_fieldname": "loan_application_id"
+  },
+  {
+   "link_doctype": "Payment Entry",
+   "link_fieldname": "loan_application_id"
+  }
+ ],
+ "modified": "2026-03-24 21:47:14.019235",
  "modified_by": "Administrator",
  "module": "Loan Management",
  "name": "Loan Application",
@@ -319,6 +339,7 @@
    "report": 1,
    "role": "Sanctioner",
    "share": 1,
+   "submit": 1,
    "write": 1
   }
  ],

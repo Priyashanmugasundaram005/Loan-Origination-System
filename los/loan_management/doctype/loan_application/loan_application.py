@@ -3,6 +3,7 @@
 
 import frappe
 from frappe.model.document import Document
+from frappe.utils import nowdate
 
 
 class LoanApplication(Document):
@@ -15,7 +16,7 @@ class LoanApplication(Document):
 	def validate_salary(self):
 		minimum_salary=frappe.get_single_value("Loan Settings",'minimum_salary')
 		if self.applicant_salary<minimum_salary:
-			frappe.throw(f"For Loan Salary should be greater than ${minimum_salary}")
+			frappe.throw(f"For Loan Salary should be greater than ${minimum_salary:,}")
 	
 	def check_eligibility(self):
 		settings=frappe.get_single("Loan Settings")
@@ -31,12 +32,48 @@ class LoanApplication(Document):
 		if self.interest_rate<product.min_interest_rate:
 			frappe.throw(f"Minimum Interest Rate is {product.min_interest_rate}")
 
-		if not product.min_loan_amount<= self.requesting_amount <= product.max_amount:
-			frappe.throw("Requesting Loan amount should be in a range of {product.min_loan_amount} - {product.max_amount}") 		
+		if not product.min_loan_amount<= self.requesting_amount <= product.max_loan_amount:
+			frappe.throw(f"Requesting Loan amount should be in a range of ${product.min_loan_amount:,} - ${product.max_loan_amount:,}") 		
 
 
 	def on_update(self):
-		if self.loan_process_status=='Sanctioned' and self.sanctioned_amount== 0.00:
+		if self.loan_process_status=='Sanctioned' and self.sanction_amount== 0.00:
 			frappe.throw("Sanction Amount Should be Filled")
+		if self.loan_process_status=='Disbursed':
+			self.db_set("loan_disbursement_date",nowdate())
+		
+		if self.loan_process_status=='Disbursed':
+			self.emi_log_creation()
 
+	def emi_log_creation(self):
+
+		emi=0
+		paid_total_amount=0
+		completed_payments=0
+		P=self.sanction_amount
+		R=self.interest_rate/(12*100)
+		N=self.tenure*12
+		if R==0:
+			emi=P/N
+		else:
+			emi=(P*R*(1+R)**N)/ ((1+R) ** N - 1)
+		emi=round(emi,2)
+
+
+
+		emi_log=frappe.db.exists("EMI",{'loan_application_id':self.name})
+		if not emi_log:
+			new_emi=frappe.new_doc("EMI")
+			new_emi.loan_application_id=self.name
+			new_emi.loan_amount=self.sanction_amount
+			new_emi.principal_amount=self.sanction_amount
+			new_emi.due_date=self.loan_disbursement_date
+			new_emi.emi_per_month=emi
+			new_emi.payment_completed_months=completed_payments
+			new_emi.amount_paid=paid_total_amount
+			new_emi.pending_amount=P
+			new_emi.paid=0
+			new_emi.emi_status='Active'
+			new_emi.insert(ignore_permissions=True)
+		
  
