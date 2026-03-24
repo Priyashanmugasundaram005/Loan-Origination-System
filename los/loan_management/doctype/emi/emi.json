@@ -7,9 +7,14 @@
  "field_order": [
   "loan_application_id",
   "loan_amount",
-  "currency_tovw",
+  "principal_amount",
   "emi_per_month",
+  "due_date",
+  "payment_completed_months",
+  "payment_pending_months",
+  "pending_amount",
   "amount_paid",
+  "emi_status",
   "paid"
  ],
  "fields": [
@@ -26,11 +31,6 @@
    "label": "Loan Amount"
   },
   {
-   "fieldname": "currency_tovw",
-   "fieldtype": "Currency",
-   "label": "Principal Amount"
-  },
-  {
    "fieldname": "emi_per_month",
    "fieldtype": "Currency",
    "label": "EMI per month"
@@ -45,12 +45,44 @@
    "fieldname": "paid",
    "fieldtype": "Check",
    "label": "Paid"
+  },
+  {
+   "fieldname": "principal_amount",
+   "fieldtype": "Currency",
+   "label": "Pending Principal Amount"
+  },
+  {
+   "fieldname": "payment_completed_months",
+   "fieldtype": "Int",
+   "label": "Payment Completed months"
+  },
+  {
+   "fieldname": "pending_amount",
+   "fieldtype": "Currency",
+   "label": "Pending amount"
+  },
+  {
+   "fieldname": "emi_status",
+   "fieldtype": "Select",
+   "label": "EMI Status",
+   "options": "Active\nClosed"
+  },
+  {
+   "fieldname": "payment_pending_months",
+   "fieldtype": "Int",
+   "label": "Payment Pending Months"
+  },
+  {
+   "fieldname": "due_date",
+   "fieldtype": "Date",
+   "label": "Due Date"
   }
  ],
  "grid_page_length": 50,
+ "in_create": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-23 16:38:17.348575",
+ "modified": "2026-03-24 16:59:07.460650",
  "modified_by": "Administrator",
  "module": "Loan Management",
  "name": "EMI",

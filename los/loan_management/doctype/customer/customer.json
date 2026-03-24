@@ -29,6 +29,7 @@
    "fieldname": "account_number",
    "fieldtype": "Data",
    "label": "Account Number",
+   "length": 18,
    "reqd": 1
   },
   {
@@ -74,7 +75,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-23 13:55:16.741856",
+ "modified": "2026-03-24 20:38:48.520806",
  "modified_by": "Administrator",
  "module": "Loan Management",
  "name": "Customer",

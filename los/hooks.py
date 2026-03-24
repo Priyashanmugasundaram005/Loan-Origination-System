@@ -117,9 +117,9 @@ app_license = "mit"
 # -----------
 # Permissions evaluated in scripted ways
 
-# permission_query_conditions = {
-# 	"Event": "frappe.desk.doctype.event.event.get_permission_query_conditions",
-# }
+permission_query_conditions = {
+	"Loan Application": "los.loan_management.doctype.emi.emi.permission_query_conditions",
+}
 #
 # has_permission = {
 # 	"Event": "frappe.desk.doctype.event.event.has_permission",
@@ -148,23 +148,26 @@ app_license = "mit"
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
-# 	"all": [
-# 		"los.tasks.all"
-# 	],
-# 	"daily": [
-# 		"los.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"los.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"los.tasks.weekly"
-# 	],
-# 	"monthly": [
-# 		"los.tasks.monthly"
-# 	],
-# }
+scheduler_events = {
+	# "all": [
+	# 	"los.tasks.all"
+	# ],
+	"daily": [
+		"los.loan_management.doctype.emi.emi.email_emi_reminder"
+	],
+	# "hourly": [
+	# 	"los.tasks.hourly"
+	# ],
+	# "weekly": [
+	# 	"los.tasks.weekly"
+	# ],
+	# "monthly": [
+	# 	"los.tasks.monthly"
+	# ],
+    "cron":{
+        "0 0 1 * *":["los.loan_management.doctype.emi.emi.make_unpaid"]
+    }
+}
 
 # Testing
 # -------
