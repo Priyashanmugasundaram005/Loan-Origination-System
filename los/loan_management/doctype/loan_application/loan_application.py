@@ -39,6 +39,8 @@ class LoanApplication(Document):
 	def on_update(self):
 		if self.loan_process_status=='Sanctioned' and self.sanction_amount== 0.00:
 			frappe.throw("Sanction Amount Should be Filled")
+		if self.loan_process_status=='Closed':
+			self.db_set("loan_status",'Closed')
 		if self.loan_process_status=='Disbursed':
 			self.db_set("loan_disbursement_date",nowdate())
 		
@@ -47,7 +49,7 @@ class LoanApplication(Document):
 
 	def emi_log_creation(self):
 
-		emi=0
+		
 		paid_total_amount=0
 		completed_payments=0
 		P=self.sanction_amount
@@ -70,8 +72,9 @@ class LoanApplication(Document):
 			new_emi.due_date=self.loan_disbursement_date
 			new_emi.emi_per_month=emi
 			new_emi.payment_completed_months=completed_payments
+			new_emi.payment_pending_months=N
 			new_emi.amount_paid=paid_total_amount
-			new_emi.pending_amount=P
+			new_emi.pending_amount=emi*N
 			new_emi.paid=0
 			new_emi.emi_status='Active'
 			new_emi.insert(ignore_permissions=True)

@@ -6,14 +6,22 @@ from frappe.model.document import Document
 from frappe.utils import getdate,add_months
 
 class PaymentEntry(Document):
+	def autoname(self):
+		if self.loan_application_id:
+			count=frappe.db.count("Payment Entry",{'loan_application_id':self.loan_application_id})+1
+			secq=str(count).zfill(5)
+			self.name=f"{self.loan_application_id}-PAYMENT-{secq}"
+
+
 	def validate(self):
 
-		if self.emi_for_this_month>self.payment_amount:
+		if self.payment_type!='Penalty' and self.emi_for_this_month > self.payment_amount:
 			frappe.throw(f"Payment amount should be greater than or equal to EMI Amount {self.emi_for_this_month}")
+
 
 	def on_submit(self):
 		if self.payment_type=='EMI':
-			rappe.enqueue(
+			frappe.enqueue(
             method="los.loan_management.doctype.payment_entry.payment_entry.emi_amount_validation",
             queue="long",
             timeout=600,

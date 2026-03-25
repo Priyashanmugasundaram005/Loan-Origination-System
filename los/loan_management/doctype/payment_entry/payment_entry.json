@@ -1,7 +1,6 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "PAYMENT-.{loan_appication_id}.-.######",
  "creation": "2026-03-24 11:31:26.352058",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -10,6 +9,7 @@
   "payment_type",
   "balance_principal_amount",
   "penalty",
+  "last_penalty_email_sent",
   "emi_for_this_month",
   "payment_amount",
   "amended_from"
@@ -46,7 +46,7 @@
    "fieldname": "payment_type",
    "fieldtype": "Select",
    "label": "Payment Type",
-   "options": "EMI\nPrincipal\nDue Penalty",
+   "options": "EMI\nPrincipal\nPenalty",
    "read_only": 1
   },
   {
@@ -55,10 +55,17 @@
    "label": "Balance Principal Amount"
   },
   {
-   "depends_on": "eval :frm.doc.payment_type=='Due Penalty'",
+   "depends_on": "eval:doc.payment_type=='Penalty'",
    "fieldname": "penalty",
    "fieldtype": "Currency",
-   "label": "Penalty",
+   "label": "Penalty Amount",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.payment_type=='Penalty'",
+   "fieldname": "last_penalty_email_sent",
+   "fieldtype": "Date",
+   "label": "Last Penalty Email Sent",
    "read_only": 1
   }
  ],
@@ -66,11 +73,10 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-03-24 21:16:51.616702",
+ "modified": "2026-03-25 12:09:32.376748",
  "modified_by": "Administrator",
  "module": "Loan Management",
  "name": "Payment Entry",
- "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {

@@ -1,0 +1,13 @@
+{
+ "creation": "2026-03-25 13:36:47.270715",
+ "docstatus": 0,
+ "doctype": "Dashboard Chart Source",
+ "idx": 0,
+ "modified": "2026-03-25 13:36:47.270715",
+ "modified_by": "Administrator",
+ "module": "Loan Management",
+ "name": "Status Chart",
+ "owner": "Administrator",
+ "source_name": "Status Chart",
+ "timeseries": 0
+}

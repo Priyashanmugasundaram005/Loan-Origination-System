@@ -118,7 +118,7 @@ app_license = "mit"
 # Permissions evaluated in scripted ways
 
 permission_query_conditions = {
-	"Loan Application": "los.loan_management.doctype.emi.emi.permission_query_conditions",
+	"Loan Application": "los.custom.custom_functions.permission_query_conditions",
 }
 #
 # has_permission = {
@@ -137,13 +137,13 @@ permission_query_conditions = {
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
+doc_events = {
+	"*": {
+		"on_update": "los.custom.custom_functions.log",
+		"on_cancel": "los.custom.custom_functions.log",
+		"on_trash": "los.custom.custom_functions.log"
+	}
+}
 
 # Scheduled Tasks
 # ---------------
@@ -153,7 +153,8 @@ scheduler_events = {
 	# 	"los.tasks.all"
 	# ],
 	"daily": [
-		"los.loan_management.doctype.emi.emi.email_emi_reminder"
+		"los.custom.custom_functions.email_emi_reminder",
+		"los.custom.custom_functions.penalty_calculation_reminder"
 	],
 	# "hourly": [
 	# 	"los.tasks.hourly"
@@ -165,7 +166,7 @@ scheduler_events = {
 	# 	"los.tasks.monthly"
 	# ],
     "cron":{
-        "0 0 1 * *":["los.loan_management.doctype.emi.emi.make_unpaid"]
+        "0 0 1 * *":["los.custom.custom_functions.make_unpaid"]
     }
 }
 
