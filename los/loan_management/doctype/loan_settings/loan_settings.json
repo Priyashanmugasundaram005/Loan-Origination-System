@@ -14,7 +14,7 @@
   {
    "fieldname": "penalty_percent",
    "fieldtype": "Percent",
-   "label": "Penalty percent"
+   "label": "Penalty Percent"
   },
   {
    "fieldname": "grace_period",
@@ -36,7 +36,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-03-23 13:58:13.904964",
+ "modified": "2026-03-26 20:29:27.938380",
  "modified_by": "Administrator",
  "module": "Loan Management",
  "name": "Loan Settings",

@@ -7,10 +7,14 @@
  "engine": "InnoDB",
  "field_order": [
   "branch_name",
+  "bank_name",
   "ifsc_code",
   "branch_email",
   "branch_address",
   "branch_phone_number",
+  "maker",
+  "checker",
+  "sanctioner",
   "is_active"
  ],
  "fields": [
@@ -33,7 +37,7 @@
   {
    "fieldname": "branch_email",
    "fieldtype": "Data",
-   "label": "Branch email"
+   "label": "Branch Email"
   },
   {
    "fieldname": "branch_address",
@@ -50,12 +54,39 @@
    "fieldname": "is_active",
    "fieldtype": "Check",
    "label": "Is Active"
+  },
+  {
+   "fieldname": "bank_name",
+   "fieldtype": "Link",
+   "label": "Bank Name",
+   "options": "Bank"
+  },
+  {
+   "description": "User should have maker permission.",
+   "fieldname": "maker",
+   "fieldtype": "Link",
+   "label": "Maker",
+   "options": "User"
+  },
+  {
+   "description": "User should have Checker permission.",
+   "fieldname": "checker",
+   "fieldtype": "Link",
+   "label": "Checker",
+   "options": "User"
+  },
+  {
+   "description": "User should have Sanctioner permission.",
+   "fieldname": "sanctioner",
+   "fieldtype": "Link",
+   "label": "Sanctioner",
+   "options": "User"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-24 11:23:02.742431",
+ "modified": "2026-03-26 20:27:05.363728",
  "modified_by": "Administrator",
  "module": "Loan Management",
  "name": "Branch",

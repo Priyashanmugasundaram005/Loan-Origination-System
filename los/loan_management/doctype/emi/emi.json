@@ -10,11 +10,15 @@
   "principal_amount",
   "emi_per_month",
   "due_date",
+  "last_emi_paid_date",
   "payment_completed_months",
   "payment_pending_months",
   "pending_amount",
+  "pend_card",
   "amount_paid",
+  "paid_card",
   "emi_status",
+  "last_penalty_email_sent",
   "paid"
  ],
  "fields": [
@@ -33,12 +37,14 @@
   {
    "fieldname": "emi_per_month",
    "fieldtype": "Currency",
-   "label": "EMI per month"
+   "label": "EMI Per Month",
+   "read_only": 1
   },
   {
    "fieldname": "amount_paid",
    "fieldtype": "Currency",
-   "label": "Amount Paid"
+   "label": "Amount Paid",
+   "read_only": 1
   },
   {
    "default": "0",
@@ -49,40 +55,69 @@
   {
    "fieldname": "principal_amount",
    "fieldtype": "Currency",
-   "label": "Pending Principal Amount"
+   "label": "Pending Principal Amount",
+   "read_only": 1
   },
   {
    "fieldname": "payment_completed_months",
    "fieldtype": "Int",
-   "label": "Payment Completed months"
+   "label": "Payment Completed Months",
+   "read_only": 1
   },
   {
    "fieldname": "pending_amount",
    "fieldtype": "Currency",
-   "label": "Pending amount"
+   "label": "Pending Amount",
+   "read_only": 1
   },
   {
    "fieldname": "emi_status",
    "fieldtype": "Select",
    "label": "EMI Status",
-   "options": "Active\nClosed"
+   "options": "Active\nClosed",
+   "read_only": 1
   },
   {
    "fieldname": "payment_pending_months",
    "fieldtype": "Int",
-   "label": "Payment Pending Months"
+   "label": "Payment Pending Months",
+   "read_only": 1
   },
   {
    "fieldname": "due_date",
    "fieldtype": "Date",
-   "label": "Due Date"
+   "label": "Due Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "pend_card",
+   "fieldtype": "Float",
+   "hidden": 1,
+   "label": "Pend_card"
+  },
+  {
+   "fieldname": "paid_card",
+   "fieldtype": "Float",
+   "hidden": 1,
+   "label": "Paid_card"
+  },
+  {
+   "fieldname": "last_emi_paid_date",
+   "fieldtype": "Date",
+   "label": "Last EMI Paid Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_penalty_email_sent",
+   "fieldtype": "Date",
+   "label": "Last Penalty Email Sent"
   }
  ],
  "grid_page_length": 50,
  "in_create": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-24 16:59:07.460650",
+ "modified": "2026-03-26 22:26:37.575531",
  "modified_by": "Administrator",
  "module": "Loan Management",
  "name": "EMI",

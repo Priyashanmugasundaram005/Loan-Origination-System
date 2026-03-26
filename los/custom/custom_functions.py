@@ -8,29 +8,77 @@ def make_unpaid():
         SET paid = 0
     """)
 
-def email_emi_reminder():
-	reminder=add_days(nowdate(),-7)
-	emi_pending=frappe.get_all("EMI",{'due_date':reminder},['name','due_date','loan_application_id'])
-	for emi in emi_pending:
-		email,applicant=frappe.get_value("Loan Application",emi.loan_application_id,['applicant_email','applicant_name'])
-		url="/app/emi/"+emi.name
+import frappe
+from frappe.utils import nowdate, add_days
 
-		frappe.enqueue(
-            method=frappe.sendmail,
-            queue="short",  
-            recipients=[email],
-            subject=f"Reminder: EMI Due Soon for Loan {emi.loan_application_id}",
-            message=f"""
-                <p>Hello {applicant}</p>
-                <h3>EMI Payment Reminder ⏰</h3>
-                <p>Your EMI is due on {emi.due_date}.</p>
-                <ul>
-                    <li>Loan ID: {emi.loan_application_id}</li>
-                    <li>EMI ID: {emi.name}</li>
-                </ul>
-                <p><a href="{url}">View EMI / Make Payment</a></p>
-            """
+
+def email_emi_reminder():
+    frappe.log_error("yesss")
+
+    remind = frappe.get_single_value("Loan Settings", 'emi_reminder_days')
+    reminder = add_days(nowdate(), remind )
+    print(remind)
+    print(reminder)
+    emi_pending = frappe.get_all(
+        "EMI",
+        {'due_date': reminder},
+        ['name', 'due_date', 'loan_application_id']
+    )
+
+    for emi in emi_pending:
+        email, applicant = frappe.get_value(
+            "Loan Application",
+            emi.loan_application_id,
+            ['applicant_email', 'applicant_name']
         )
+
+        url = f"/app/emi/{emi.name}"
+
+        frappe.enqueue(
+            method=frappe.sendmail,
+            queue="short",
+            recipients=[email],
+            subject=f"⏰ EMI Reminder | Loan {emi.loan_application_id}",
+            message=get_emi_email_template(applicant, emi, url)
+        )
+
+def get_emi_email_template(applicant, emi, url):
+    return f"""
+    <div style="font-family: Arial, sans-serif; line-height:1.6; color:#333;">
+        
+        <h2 style="color:#2E86C1;">📢 EMI Payment Reminder</h2>
+
+        <p>Dear <b>{applicant}</b>,</p>
+
+        <p>This is a friendly reminder that your upcoming EMI payment is scheduled soon.</p>
+
+        <div style="background:#F4F6F7; padding:15px; border-radius:8px;">
+            <p><b>📅 Due Date:</b> {emi.due_date}</p>
+            <p><b>📄 Loan ID:</b> {emi.loan_application_id}</p>
+            <p><b>💳 EMI Reference:</b> {emi.name}</p>
+        </div>
+
+        <p style="margin-top:15px;">
+            To avoid any late fees or penalties, we recommend completing your payment on or before the due date.
+        </p>
+
+        <p style="text-align:center; margin:25px 0;">
+            <a href="{url}" 
+               style="background:#28B463; color:white; padding:12px 20px; 
+                      text-decoration:none; border-radius:5px; font-weight:bold;">
+               👉 View EMI & Pay Now
+            </a>
+        </p>
+
+        <p>If you have already made the payment, please ignore this message.</p>
+
+        <hr>
+
+
+        <p>Regards,<br><b>Loan Team</b></p>
+
+    </div>
+    """
         
 
 def permission_query_conditions(user):
@@ -38,29 +86,46 @@ def permission_query_conditions(user):
         return ""
 
     roles = frappe.get_roles(user)
+    branch_condition = f"""
+        `tabLoan Application`.branch_name IN (
+            SELECT name FROM `tabBranch`
+            WHERE maker = {frappe.db.escape(user)}
+            OR checker = {frappe.db.escape(user)}
+            OR sanctioner = {frappe.db.escape(user)}
+        )
+    """
 
-    if "Maker" in roles:
-        return f"""
-            `tabLoan Application`.owner = {frappe.db.escape(user)}
-        """
+    if "Maker" in roles :
+        return branch_condition
 
     elif "Checker" in roles:
-        return """
-            `tabLoan Application`.loan_process_status = 'Pending Verification'
+        return f"""
+        {branch_condition} AND `tabLoan Application`.loan_process_status = 'Pending Verification'
         """
 
     elif "Sanctioner" in roles:
-        return """
-            `tabLoan Application`.loan_process_status = 'Verified'
+        return f"""
+        {branch_condition} AND `tabLoan Application`.loan_process_status IN ('Verified', 'Sanctioned')
         """
 
     return "1=0"
 
 
+def has_permission(doc,user):
+    if not user:
+        user=frappe.session.user
+
+    if user=='Administrator':
+         return ""
+    workers=frappe.get_doc("Branch",doc.branch_name)
+    if user in [workers.maker,workers.checker,workers.sanctioner]:
+         return True
+
+
 def penalty_calculation_reminder():
     today = getdate(nowdate())
       
-    pending=frappe.get_all("EMI",filters={"due_date": ["<", nowdate()]},fields=["name", "emi_per_month", "loan_application_id"])
+    pending=frappe.get_all("EMI",filters={"due_date": ["<", nowdate()]},fields=["name", "emi_per_month", "loan_application_id",'last_penalty_email_sent'])
     penalty_rate=frappe.get_single_value("Loan Settings",'penalty_percent')
 
     for pending_emi in pending:
@@ -73,8 +138,8 @@ def penalty_calculation_reminder():
         exists=frappe.db.exists("Payment Entry",{'loan_application_id':loan})
         if exists:
             old=frappe.get_doc("Payment Entry",exists)
-            if old.last_penalty_email_sent:
-                last_date = getdate(old.last_penalty_email_sent)
+            if pending_emi.get("last_penalty_email_sent"):
+                last_date = getdate(pending_emi.get("last_penalty_email_sent")) 
 
                 if last_date.month == today.month and last_date.year == today.year:
                     continue 
@@ -92,23 +157,51 @@ def penalty_calculation_reminder():
             url="/app/payment-entry/"+new.name
 
         frappe.enqueue(
-            method=frappe.sendmail,
-            queue="short", 
-            recipients=[email],
-            subject=f"Alert: Penalty for Loan {loan}",
-            message=f"""
-                    <p>Hello {applicant}</p>
-                    <li>Loan ID: {loan}</li>
-                    <li>EMI ID: {pending_emi.name}</li>
-                    <li>Penalty Amount :{penalty_amount}</li>
+        method=frappe.sendmail,
+        queue="short",
+        recipients=[email],
+        subject=f"⚠️ Penalty Alert | Loan {loan}",
+        message=f"""
+        <div style="font-family: Arial, sans-serif; color:#333; line-height:1.6;">
+
+            <h3 style="color:#C0392B;">Penalty Notification ⚠️</h3>
+
+            <p>Dear {applicant},</p>
+
+            <p>
+                A penalty has been applied to your loan due to delayed payment.
+            </p>
+
+            <div style="background:#FDEDEC; padding:12px; border-radius:6px;">
+                <ul style="list-style:none; padding-left:0;">
+                    <li><b>Loan ID:</b> {loan}</li>
+                    <li><b>EMI ID:</b> {pending_emi.name}</li>
+                    <li><b>Penalty Amount:</b> ₹{penalty_amount}</li>
                 </ul>
-                <p><a href="{url}">View EMI / Make Payment</a></p>
-            """
-        )
-        if exists:
-            old.db_set("last_penalty_email_sent", nowdate())
-        else:
-            new.db_set("last_penalty_email_sent", nowdate())
+            </div>
+
+            <p style="margin-top:15px;">
+                Please clear the penalty at the earliest to avoid further charges.
+            </p>
+
+            <p style="text-align:center; margin:20px 0;">
+                <a href="{url}" 
+                style="background:#E74C3C; color:white; padding:10px 18px; 
+                        text-decoration:none; border-radius:5px;">
+                    View Penalty Details & Pay Now
+                </a>
+            </p>
+
+            <p>
+                Regards,<br>
+                <b>Loan Processing Team</b>
+            </p>
+
+        </div>
+        """)
+        frappe.log_error("ppppp",pending_emi.last_penalty_email_sent)
+        doc=frappe.get_doc("EMI",pending_emi.name)
+        doc.db_set("last_penalty_email_sent", nowdate())
 
 def log(doc,method):
     allowed=['Loan Application','Payment Entry','EMI']
@@ -165,7 +258,27 @@ def get_status_chart_data():
         
     
     }
-             
+
+@frappe.whitelist()
+def get_loan_type_chart():
+    data = frappe.db.sql("""
+        SELECT loan_category_type, COUNT(*) as count
+        FROM `tabLoan Application`
+        GROUP BY loan_category_type
+    """, as_dict=True)
+
+    labels = [d.loan_category_type for d in data]
+    values = [d.count for d in data]
+
+    return {
+        "labels": labels,
+        "datasets": [
+            {
+                "name": "Loan Type Distribution",
+                "values": values
+            }
+        ]
+    }     
              
                 
             

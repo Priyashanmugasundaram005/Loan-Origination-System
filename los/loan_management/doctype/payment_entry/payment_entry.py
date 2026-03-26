@@ -3,7 +3,7 @@
 
 import frappe
 from frappe.model.document import Document
-from frappe.utils import getdate,add_months
+from frappe.utils import getdate,add_months,nowdate
 
 class PaymentEntry(Document):
 	def autoname(self):
@@ -22,10 +22,9 @@ class PaymentEntry(Document):
 	def on_submit(self):
 		if self.payment_type=='EMI':
 			frappe.enqueue(
-            method="los.loan_management.doctype.payment_entry.payment_entry.emi_amount_validation",
+            method=self.emi_amount_validation,
             queue="long",
             timeout=600,
-            doc_name=self.name
         )
 		
 		if self.payment_type=='Principal':
@@ -35,8 +34,8 @@ class PaymentEntry(Document):
 
 
 
-	def emi_amount_validation(doc_name):
-		doc=frappe.get_doc("Payment_entry",doc_name)
+	def emi_amount_validation(self):
+		doc=frappe.get_doc("Payment Entry",self.name)
 		emi_doc=frappe.get_doc('EMI',{'loan_application_id':doc.loan_application_id})
 		
 		months_comp=emi_doc.payment_completed_months+1
@@ -70,6 +69,7 @@ class PaymentEntry(Document):
 			'payment_completed_months':months_comp,
 			'due_date':due,
 			'principal_amount':principal,
+			'last_emi_paid_date':nowdate(),
 			'payment_pending_months':pending_months,
 			'pending_amount':total_emi,
 			'amount_paid':total_paid,

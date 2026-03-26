@@ -1,8 +1,38 @@
-// Copyright (c) 2026, los and contributors
-// For license information, please see license.txt
+frappe.ui.form.on("Loan Application", {
+    bank_name: function (frm) {
+        console.log("22222222");
 
-// frappe.ui.form.on("Loan Application", {
-// 	refresh(frm) {
+        frappe.call({
+            method: "los.loan_management.doctype.loan_application.loan_application.bank",
+            args: {
+                doc: frm.doc.bank_name
+            },
+            callback: function (r) {
+                console.log("111111");
 
-// 	},
-// });
+                let branch = r.message || [];
+                console.log(branch);
+
+                frm.set_query('branch_name', () => {
+                    if (!branch.length) {
+                        return {
+                            filters: {
+                                name: ["=", ""]
+                            }
+                        };
+                    }
+
+                    return {
+                        filters: {
+                            name: ['in', branch]
+                        }
+                    };
+                });
+
+                if (!branch.length) {
+                    frappe.msgprint("No branches found for selected bank");
+                }
+            }
+        });
+    }
+});

@@ -3,7 +3,7 @@
 
 import frappe
 from frappe.model.document import Document
-from frappe.utils import nowdate
+from frappe.utils import nowdate,add_months
 
 
 class LoanApplication(Document):
@@ -11,6 +11,7 @@ class LoanApplication(Document):
 		self.validate_salary()
 		self.check_eligibility()
 		self.validate_loan_product()
+		self.db_set("sanction",self.sanction_amount)
 
 
 	def validate_salary(self):
@@ -61,6 +62,8 @@ class LoanApplication(Document):
 			emi=(P*R*(1+R)**N)/ ((1+R) ** N - 1)
 		emi=round(emi,2)
 
+		due=add_months(self.loan_disbursement_date,1)
+
 
 
 		emi_log=frappe.db.exists("EMI",{'loan_application_id':self.name})
@@ -69,7 +72,7 @@ class LoanApplication(Document):
 			new_emi.loan_application_id=self.name
 			new_emi.loan_amount=self.sanction_amount
 			new_emi.principal_amount=self.sanction_amount
-			new_emi.due_date=self.loan_disbursement_date
+			new_emi.due_date=due
 			new_emi.emi_per_month=emi
 			new_emi.payment_completed_months=completed_payments
 			new_emi.payment_pending_months=N
@@ -78,5 +81,23 @@ class LoanApplication(Document):
 			new_emi.paid=0
 			new_emi.emi_status='Active'
 			new_emi.insert(ignore_permissions=True)
-		
+
+@frappe.whitelist(allow_guest=True)
+def bank(doc):
+	import json
+	print(222222222222222222)
+	frappe.log_error("7777",doc)
+	# frappe.log_error("6666666",doc.bank_name)
+	# bnk= doc.bank_name
+	branch_names=frappe.get_all("Branch",{'bank_name':doc},pluck="name")
+	frappe.log_error('branch',branch_names)
+	return branch_names
+
+# import json
  
+# @frappe.whitelist(allow_guest=True)
+# def bank(doc):
+#     doc = json.loads(doc)  # convert string to dict
+    
+#     frappe.log_error("Full Doc", str(doc))
+#     frappe.log_error("Bank Name", doc.get("bank_name"))

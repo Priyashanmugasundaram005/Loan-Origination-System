@@ -23,7 +23,31 @@ app_license = "mit"
 
 # Includes in <head>
 # ------------------
+fixtures=[
+    
+    {
+        'dt':'Role',
+        filter:['name','in',['Maker','Checker','Sanctioner']]
+        
+    }, 
+    "Property Setter",
+    "Workspace",
+    "Dashboard",
+	"Email Account",
+	"Notification",
+	"User",
+    "Workflow",
+	"Workflow State",
+	"Workflow Action",
+    "Number Card",
+	"Dashboard Chart",
+	"Report"
+    
+    
 
+
+    
+]
 # include js, css files in header of desk.html
 # app_include_css = "/assets/los/css/los.css"
 # app_include_js = "/assets/los/js/los.js"
@@ -121,9 +145,9 @@ permission_query_conditions = {
 	"Loan Application": "los.custom.custom_functions.permission_query_conditions",
 }
 #
-# has_permission = {
-# 	"Event": "frappe.desk.doctype.event.event.has_permission",
-# }
+has_permission = {
+	"Loan Application": "los.custom.custom_functions.has_permission",
+}
 
 # DocType Class
 # ---------------

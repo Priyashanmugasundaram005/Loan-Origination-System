@@ -99,17 +99,31 @@ def execute(filters=None):
 	labels=[]
 	total=[]
 	closed=[]
+	total_sanction=[]
+	total_paid=[]
+	customer_map=defaultdict(int)
+	max_loans=0
+	cust=None
+
 
 
 	for d in data:
 		cat = d.get("loan_category")
 		status = d.get("loan_status")
+		customer=d.get("applicant_id")
 
 		category_map[cat]["total"] += 1
+		total_sanction.append(d.get('loan_sanctioned_amount'))
+		total_paid.append(d.get('total_emis_paid'))
 
 		if status == "Closed":
 			category_map[cat]["closed"] += 1
 
+		customer_map[customer]+=1
+
+		if customer_map[customer] >max_loans:
+			max_loans=customer_map[customer]
+			cust=customer
 	
 	for cat, values in category_map.items():
 		labels.append(cat)
@@ -136,5 +150,16 @@ def execute(filters=None):
 		'height': 300,
 	}
 
+	tot=sum(total_sanction)
+	tot_paid=sum(total_paid)
 
-	return columns, data ,None, chart
+	summary=[
+		
+			{'label':"Total Sanctioned amount",'value':tot,'datatype':'Currency'},
+			{'label':"Total EMIs Paid amount",'value':tot_paid,'datatype':'Currency'},
+			{'label':"Customer With high loans",'value':f"{cust} ({max_loans} loans)",'datatype':'Data'}
+
+		
+	]
+
+	return columns, data ,None, chart,summary

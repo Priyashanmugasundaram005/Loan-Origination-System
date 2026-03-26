@@ -29,6 +29,7 @@
   "loan_status",
   "requesting_amount",
   "sanction_amount",
+  "sanction",
   "joint_applicants_details_section",
   "joint_applicants",
   "nominee_details_section",
@@ -107,7 +108,7 @@
    "fetch_from": "applicant_id.credit_score",
    "fieldname": "credit_score",
    "fieldtype": "Int",
-   "label": "Credit score"
+   "label": "Credit Score"
   },
   {
    "fieldname": "amended_from",
@@ -156,7 +157,7 @@
   {
    "fieldname": "nominees",
    "fieldtype": "Table",
-   "label": "Nominees",
+   "label": "Nominee",
    "options": "Nominee Table"
   },
   {
@@ -168,9 +169,9 @@
    "reqd": 1
   },
   {
+   "fetch_from": "loan_product.min_interest_rate",
    "fieldname": "interest_rate",
    "fieldtype": "Percent",
-   "in_list_view": 1,
    "label": "Interest Rate",
    "reqd": 1
   },
@@ -179,7 +180,8 @@
    "fetch_from": "loan_product.min_tenure",
    "fieldname": "tenure",
    "fieldtype": "Int",
-   "label": "Tenure"
+   "label": "Tenure",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_ojsl",
@@ -271,6 +273,12 @@
    "fieldname": "loan_disbursement_date",
    "fieldtype": "Date",
    "label": "Loan Disbursement Date"
+  },
+  {
+   "fieldname": "sanction",
+   "fieldtype": "Float",
+   "hidden": 1,
+   "label": "Sanction"
   }
  ],
  "grid_page_length": 50,
@@ -286,7 +294,7 @@
    "link_fieldname": "loan_application_id"
   }
  ],
- "modified": "2026-03-25 13:06:15.396721",
+ "modified": "2026-03-26 20:26:30.274816",
  "modified_by": "Administrator",
  "module": "Loan Management",
  "name": "Loan Application",
@@ -300,7 +308,7 @@
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "System Manager",
+   "role": "Checker",
    "share": 1,
    "write": 1
   },
@@ -312,7 +320,7 @@
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "Checker",
+   "role": "System Manager",
    "share": 1,
    "write": 1
   },
