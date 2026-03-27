@@ -3,17 +3,29 @@
 
 import frappe
 from frappe.model.document import Document
-from frappe.utils import getdate,add_months
+from frappe.utils import getdate,add_months,nowdate
 
 class PaymentEntry(Document):
+	def autoname(self):
+		if self.loan_application_id:
+			count=frappe.db.count("Payment Entry",{'loan_application_id':self.loan_application_id})+1
+			secq=str(count).zfill(5)
+			self.name=f"{self.loan_application_id}-PAYMENT-{secq}"
+
+
 	def validate(self):
 
-		if self.emi_for_this_month>self.payment_amount:
+		if self.payment_type!='Penalty' and self.emi_for_this_month > self.payment_amount:
 			frappe.throw(f"Payment amount should be greater than or equal to EMI Amount {self.emi_for_this_month}")
+
 
 	def on_submit(self):
 		if self.payment_type=='EMI':
-			self.emi_amount_validation()
+			frappe.enqueue(
+            method=self.emi_amount_validation,
+            queue="long",
+            timeout=600,
+        )
 		
 		if self.payment_type=='Principal':
 			self.principal_amount_validation()
@@ -23,16 +35,17 @@ class PaymentEntry(Document):
 
 
 	def emi_amount_validation(self):
-		emi_doc=frappe.get_doc('EMI',{'loan_application_id':self.loan_application_id})
+		doc=frappe.get_doc("Payment Entry",self.name)
+		emi_doc=frappe.get_doc('EMI',{'loan_application_id':doc.loan_application_id})
 		
 		months_comp=emi_doc.payment_completed_months+1
 		principal=emi_doc.principal_amount
 
-		if self.emi_for_this_month<self.payment_amount:
-			extra_amount=self.payment_amount-self.emi_for_this_month
+		if doc.emi_for_this_month<doc.payment_amount:
+			extra_amount=doc.payment_amount-doc.emi_for_this_month
 			principal=emi_doc.principal_amount-extra_amount
-		tenure,interest_rate=frappe.get_value("Loan Application",self.loan_application_id,['tenure','interest_rate'])
-		frappe.log_error("ten",tenure)
+		tenure,interest_rate=frappe.get_value("Loan Application",doc.loan_application_id,['tenure','interest_rate'])
+		
 		N=tenure*12
 		pending_months=N-months_comp	
 		R=interest_rate/(12*100)
@@ -44,7 +57,7 @@ class PaymentEntry(Document):
 
 		emi=round(emi,2)
 		total_emi=emi* pending_months
-		total_paid=emi_doc.amount_paid+self.payment_amount
+		total_paid=emi_doc.amount_paid+doc.payment_amount
 
 		if principal==0:
 			emi_doc.db_set('emi_status','Closed')
@@ -56,12 +69,13 @@ class PaymentEntry(Document):
 			'payment_completed_months':months_comp,
 			'due_date':due,
 			'principal_amount':principal,
+			'last_emi_paid_date':nowdate(),
 			'payment_pending_months':pending_months,
 			'pending_amount':total_emi,
 			'amount_paid':total_paid,
 			'paid':1
 		})
-		
+
 
 	def principal_amount_validation(self):
 		emi_doc=frappe.get_doc('EMI',{'loan_application_id':self.loan_application_id})

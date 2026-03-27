@@ -6,7 +6,6 @@
  "engine": "InnoDB",
  "field_order": [
   "penalty_percent",
-  "grace_period",
   "emi_reminder_days",
   "minimum_salary"
  ],
@@ -14,12 +13,7 @@
   {
    "fieldname": "penalty_percent",
    "fieldtype": "Percent",
-   "label": "Penalty percent"
-  },
-  {
-   "fieldname": "grace_period",
-   "fieldtype": "Int",
-   "label": "Grace Period"
+   "label": "Penalty Percent"
   },
   {
    "fieldname": "emi_reminder_days",
@@ -36,7 +30,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-03-23 13:58:13.904964",
+ "modified": "2026-03-27 16:46:04.267272",
  "modified_by": "Administrator",
  "module": "Loan Management",
  "name": "Loan Settings",

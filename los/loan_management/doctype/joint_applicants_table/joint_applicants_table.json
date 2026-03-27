@@ -3,6 +3,7 @@
  "allow_rename": 1,
  "creation": "2026-03-23 12:28:41.662035",
  "doctype": "DocType",
+ "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
   "joint_applicant_name",
@@ -19,21 +20,21 @@
   {
    "fetch_from": "joint_applicant_name.account_number",
    "fieldname": "account_number",
-   "fieldtype": "Int",
+   "fieldtype": "Data",
    "label": "Account Number"
   },
   {
    "fetch_from": "joint_applicant_name.customer_phone_number",
    "fieldname": "phone_number",
    "fieldtype": "Phone",
-   "label": "Phone number"
+   "label": "Phone Number"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-03-23 12:46:48.255001",
+ "modified": "2026-03-27 12:10:41.049934",
  "modified_by": "Administrator",
  "module": "Loan Management",
  "name": "Joint Applicants Table",

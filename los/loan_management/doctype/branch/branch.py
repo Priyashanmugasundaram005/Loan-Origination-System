@@ -8,8 +8,11 @@ from frappe.utils import validate_email_address
 
 
 class Branch(Document):
+	def autoname(self):
+		if self.bank_name:
+			self.name=f"{self.branch_name} - {self.bank_name}"
 	def validate(self):
-		validate_email_address(self.customer_email, throw=True)
+		validate_email_address(self.branch_email, throw=True)
 		pattern=pattern = r'^[A-Z]{4}0[A-Z0-9]{6}$'
 		if self.ifsc_code and not re.match(pattern,self.ifsc_code):
 			frappe.throw("Enter a Valid IFSC Code")

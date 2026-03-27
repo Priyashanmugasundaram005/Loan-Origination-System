@@ -1,7 +1,7 @@
 // Copyright (c) 2026, los and contributors
 // For license information, please see license.txt
 
-// frappe.ui.form.on("Loan Product Categories", {
+// frappe.ui.form.on("Loan Product Category", {
 // 	refresh(frm) {
 
 // 	},

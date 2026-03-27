@@ -29,6 +29,7 @@
   "loan_status",
   "requesting_amount",
   "sanction_amount",
+  "sanction",
   "joint_applicants_details_section",
   "joint_applicants",
   "nominee_details_section",
@@ -107,7 +108,7 @@
    "fetch_from": "applicant_id.credit_score",
    "fieldname": "credit_score",
    "fieldtype": "Int",
-   "label": "Credit score"
+   "label": "Credit Score"
   },
   {
    "fieldname": "amended_from",
@@ -134,8 +135,7 @@
    "fetch_from": "loan_product.category_name",
    "fieldname": "loan_category_type",
    "fieldtype": "Data",
-   "label": "Loan Category Name",
-   "read_only": 1
+   "label": "Loan Category Name"
   },
   {
    "fieldname": "joint_applicants_details_section",
@@ -156,7 +156,7 @@
   {
    "fieldname": "nominees",
    "fieldtype": "Table",
-   "label": "Nominees",
+   "label": "Nominee",
    "options": "Nominee Table"
   },
   {
@@ -168,9 +168,9 @@
    "reqd": 1
   },
   {
+   "fetch_from": "loan_product.min_interest_rate",
    "fieldname": "interest_rate",
    "fieldtype": "Percent",
-   "in_list_view": 1,
    "label": "Interest Rate",
    "reqd": 1
   },
@@ -179,7 +179,8 @@
    "fetch_from": "loan_product.min_tenure",
    "fieldname": "tenure",
    "fieldtype": "Int",
-   "label": "Tenure"
+   "label": "Tenure",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_ojsl",
@@ -265,13 +266,18 @@
   {
    "fieldname": "reason_for_rejection",
    "fieldtype": "Small Text",
-   "label": "Reason For Rejection",
-   "read_only_depends_on": "eval:doc.loan_process_status != \"Pending Verification\" || doc.loan_process_status != \"Verified\""
+   "label": "Remarks"
   },
   {
    "fieldname": "loan_disbursement_date",
    "fieldtype": "Date",
    "label": "Loan Disbursement Date"
+  },
+  {
+   "fieldname": "sanction",
+   "fieldtype": "Float",
+   "hidden": 1,
+   "label": "Sanction"
   }
  ],
  "grid_page_length": 50,
@@ -287,7 +293,7 @@
    "link_fieldname": "loan_application_id"
   }
  ],
- "modified": "2026-03-24 21:47:14.019235",
+ "modified": "2026-03-27 15:49:00.803988",
  "modified_by": "Administrator",
  "module": "Loan Management",
  "name": "Loan Application",
@@ -301,7 +307,7 @@
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "System Manager",
+   "role": "Checker",
    "share": 1,
    "write": 1
   },
@@ -313,7 +319,7 @@
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "Checker",
+   "role": "System Manager",
    "share": 1,
    "write": 1
   },
@@ -340,6 +346,18 @@
    "role": "Sanctioner",
    "share": 1,
    "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Bank Manager",
+   "share": 1,
    "write": 1
   }
  ],
