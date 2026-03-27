@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "field:branch_name",
+ "autoname": "{branch_name}.-.{bank_name}",
  "creation": "2026-03-23 11:41:07.446157",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -23,8 +23,7 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Branch Name",
-   "reqd": 1,
-   "unique": 1
+   "reqd": 1
   },
   {
    "fieldname": "ifsc_code",
@@ -86,11 +85,11 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-26 20:27:05.363728",
+ "modified": "2026-03-27 16:04:25.182445",
  "modified_by": "Administrator",
  "module": "Loan Management",
  "name": "Branch",
- "naming_rule": "By fieldname",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {

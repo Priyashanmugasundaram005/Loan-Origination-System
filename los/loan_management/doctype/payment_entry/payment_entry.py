@@ -45,7 +45,7 @@ class PaymentEntry(Document):
 			extra_amount=doc.payment_amount-doc.emi_for_this_month
 			principal=emi_doc.principal_amount-extra_amount
 		tenure,interest_rate=frappe.get_value("Loan Application",doc.loan_application_id,['tenure','interest_rate'])
-		frappe.log_error("ten",tenure)
+		
 		N=tenure*12
 		pending_months=N-months_comp	
 		R=interest_rate/(12*100)

@@ -19,7 +19,7 @@ def execute(filters=None):
 		base_filter['applicant_id']=applicant
 
 	if cat:
-		base_filter['loan_category']=cat
+		base_filter['loan_category_type']=cat
 
 	columns=[
 		{
@@ -72,6 +72,7 @@ def execute(filters=None):
 	data=[]
 
 	doc_loans=frappe.get_all("Loan Application",filters=base_filter)
+	frappe.log_error("filter",base_filter)
 	frappe.log_error("loans",doc_loans)
 	for docs in doc_loans:
 		# frappe.log_error("doc",doc)

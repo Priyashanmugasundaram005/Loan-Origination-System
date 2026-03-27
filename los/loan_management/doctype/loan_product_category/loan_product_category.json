@@ -23,7 +23,7 @@
    "fieldname": "parent_category",
    "fieldtype": "Link",
    "label": "Parent Category",
-   "options": "Loan Product Categories"
+   "options": "Loan Product Category"
   },
   {
    "fieldname": "description",

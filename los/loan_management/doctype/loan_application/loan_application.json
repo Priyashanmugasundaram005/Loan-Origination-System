@@ -135,8 +135,7 @@
    "fetch_from": "loan_product.category_name",
    "fieldname": "loan_category_type",
    "fieldtype": "Data",
-   "label": "Loan Category Name",
-   "read_only": 1
+   "label": "Loan Category Name"
   },
   {
    "fieldname": "joint_applicants_details_section",
@@ -294,7 +293,7 @@
    "link_fieldname": "loan_application_id"
   }
  ],
- "modified": "2026-03-26 20:26:30.274816",
+ "modified": "2026-03-27 15:49:00.803988",
  "modified_by": "Administrator",
  "module": "Loan Management",
  "name": "Loan Application",
@@ -347,6 +346,18 @@
    "role": "Sanctioner",
    "share": 1,
    "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Bank Manager",
+   "share": 1,
    "write": 1
   }
  ],

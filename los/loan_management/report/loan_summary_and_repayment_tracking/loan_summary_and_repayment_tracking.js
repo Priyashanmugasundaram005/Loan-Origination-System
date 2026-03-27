@@ -4,10 +4,10 @@
 frappe.query_reports["Loan Summary and Repayment tracking"] = {
 	"filters": [
 		{
-			fieldname:'Loan_category',
+			fieldname:'loan_category',
 			label:('Loan Category'),
 			fieldtype:'Link',
-			options:'Loan Product Categories'
+			options:'Loan Product Category'
 		},
 		{
 			fieldname:'applicant_id',

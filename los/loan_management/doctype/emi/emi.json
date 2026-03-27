@@ -110,14 +110,16 @@
   {
    "fieldname": "last_penalty_email_sent",
    "fieldtype": "Date",
-   "label": "Last Penalty Email Sent"
+   "hidden": 1,
+   "label": "Last Penalty Email Sent",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "in_create": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-26 22:26:37.575531",
+ "modified": "2026-03-27 16:22:10.991713",
  "modified_by": "Administrator",
  "module": "Loan Management",
  "name": "EMI",

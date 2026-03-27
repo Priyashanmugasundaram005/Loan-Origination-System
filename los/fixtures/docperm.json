@@ -4873,7 +4873,7 @@
   "match": null,
   "modified": "2026-03-24 15:14:03.452121",
   "name": "872qrprglo",
-  "parent": "Loan Product Categories",
+  "parent": "Loan Product Category",
   "parentfield": "permissions",
   "parenttype": "DocType",
   "permlevel": 0,

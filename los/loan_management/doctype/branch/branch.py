@@ -8,6 +8,9 @@ from frappe.utils import validate_email_address
 
 
 class Branch(Document):
+	def autoname(self):
+		if self.bank_name:
+			self.name=f"{self.branch_name} - {self.bank_name}"
 	def validate(self):
 		validate_email_address(self.branch_email, throw=True)
 		pattern=pattern = r'^[A-Z]{4}0[A-Z0-9]{6}$'

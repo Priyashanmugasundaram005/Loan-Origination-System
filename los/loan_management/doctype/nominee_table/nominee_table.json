@@ -3,6 +3,7 @@
  "allow_rename": 1,
  "creation": "2026-03-23 12:31:52.818340",
  "doctype": "DocType",
+ "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
   "nominee_name",
@@ -49,7 +50,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-03-23 12:45:38.875459",
+ "modified": "2026-03-27 12:06:27.486561",
  "modified_by": "Administrator",
  "module": "Loan Management",
  "name": "Nominee Table",

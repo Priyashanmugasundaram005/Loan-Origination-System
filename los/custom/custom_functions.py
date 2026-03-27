@@ -1,6 +1,6 @@
 import frappe
 from frappe.model.document import Document
-from frappe.utils import nowdate,add_days,getdate
+from frappe.utils import nowdate,add_days,getdate,today
 
 def make_unpaid():
 	frappe.db.sql("""
@@ -8,12 +8,10 @@ def make_unpaid():
         SET paid = 0
     """)
 
-import frappe
-from frappe.utils import nowdate, add_days
 
 
 def email_emi_reminder():
-    frappe.log_error("yesss")
+    
 
     remind = frappe.get_single_value("Loan Settings", 'emi_reminder_days')
     reminder = add_days(nowdate(), remind )
@@ -84,8 +82,22 @@ def get_emi_email_template(applicant, emi, url):
 def permission_query_conditions(user):
     if user == "Administrator":
         return ""
+    
 
     roles = frappe.get_roles(user)
+    bank_condition = f"""
+        `tabLoan Application`.bank_name IN (
+            SELECT name FROM `tabBank`
+            WHERE bank_manager = {frappe.db.escape(user)}
+            
+        )
+    """
+    
+
+    if 'Bank Manager' in roles:
+        
+        return bank_condition
+    
     branch_condition = f"""
         `tabLoan Application`.branch_name IN (
             SELECT name FROM `tabBranch`
@@ -114,6 +126,9 @@ def permission_query_conditions(user):
 def has_permission(doc,user):
     if not user:
         user=frappe.session.user
+    managers=frappe.get_value("Bank",doc.bank_name,'bank_manager')
+    if user ==managers:
+        return True
 
     if user=='Administrator':
          return ""
@@ -199,9 +214,7 @@ def penalty_calculation_reminder():
 
         </div>
         """)
-        frappe.log_error("ppppp",pending_emi.last_penalty_email_sent)
-        doc=frappe.get_doc("EMI",pending_emi.name)
-        doc.db_set("last_penalty_email_sent", nowdate())
+        frappe.db.set_value("EMI",pending_emi.name,"last_penalty_email_sent",today)
 
 def log(doc,method):
     allowed=['Loan Application','Payment Entry','EMI']
@@ -256,7 +269,6 @@ def get_status_chart_data():
         ],
         "type":"bar",
         
-    
     }
 
 @frappe.whitelist()
@@ -266,9 +278,14 @@ def get_loan_type_chart():
         FROM `tabLoan Application`
         GROUP BY loan_category_type
     """, as_dict=True)
+    labels=[]
+    values=[]
 
-    labels = [d.loan_category_type for d in data]
-    values = [d.count for d in data]
+    for d in data:
+        category=frappe.db.get_value("Loan Product Category",d.loan_category_type,'category_name')
+        
+        labels.append(category)
+        values.append(d.count)
 
     return {
         "labels": labels,

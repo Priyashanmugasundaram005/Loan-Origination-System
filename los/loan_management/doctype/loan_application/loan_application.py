@@ -84,13 +84,9 @@ class LoanApplication(Document):
 
 @frappe.whitelist(allow_guest=True)
 def bank(doc):
-	import json
-	print(222222222222222222)
-	frappe.log_error("7777",doc)
-	# frappe.log_error("6666666",doc.bank_name)
-	# bnk= doc.bank_name
+	
 	branch_names=frappe.get_all("Branch",{'bank_name':doc},pluck="name")
-	frappe.log_error('branch',branch_names)
+	
 	return branch_names
 
 # import json

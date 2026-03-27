@@ -1,6 +1,6 @@
 frappe.ui.form.on("Loan Application", {
     bank_name: function (frm) {
-        console.log("22222222");
+        
 
         frappe.call({
             method: "los.loan_management.doctype.loan_application.loan_application.bank",
