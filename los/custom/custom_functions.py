@@ -222,13 +222,14 @@ def log(doc,method):
         audit=frappe.new_doc("Audit Log")
         audit.process_type=doc.doctype
         audit.action=method
+        audit.date=today()
 
         if doc.doctype=='Loan Application':
             audit.loan_application_id=doc.name
             audit.bank_name=doc.bank_name
             audit.applicant_name=doc.applicant_name
             audit.application_status=doc.loan_process_status
-            audit.remarks=doc.reason_for_rejection
+            audit.remarks=doc.workflow_remarks
 
         elif doc.doctype=="EMI":
             audit.loan_application_id=doc.loan_application_id

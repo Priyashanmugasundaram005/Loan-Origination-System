@@ -11,6 +11,7 @@
   "bank_name",
   "applicant_name",
   "application_status",
+  "date",
   "emi_status",
   "emi_amount",
   "paid_amount",
@@ -85,12 +86,17 @@
    "fieldname": "action",
    "fieldtype": "Data",
    "label": "Action"
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-26 20:27:40.340864",
+ "modified": "2026-03-30 10:52:27.358848",
  "modified_by": "Administrator",
  "module": "Loan Management",
  "name": "Audit Log",

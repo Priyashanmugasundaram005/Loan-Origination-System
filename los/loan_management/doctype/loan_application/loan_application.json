@@ -5,9 +5,15 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "loan_overview_tab",
   "bank_details_section",
   "bank_name",
   "branch_name",
+  "section_break_jygn",
+  "loan_process_status",
+  "loan_disbursement_date",
+  "workflow_remarks",
+  "tab_2_tab",
   "applicant_details_section",
   "applicant_id",
   "applicant_name",
@@ -19,6 +25,7 @@
   "applicant_salary",
   "credit_score",
   "amended_from",
+  "tab_3_tab",
   "loan_product_details_section",
   "loan_product",
   "loan_category_type",
@@ -30,20 +37,17 @@
   "requesting_amount",
   "sanction_amount",
   "sanction",
-  "joint_applicants_details_section",
-  "joint_applicants",
-  "nominee_details_section",
-  "nominees",
   "primary_securities_section",
   "security_type",
   "security_description",
   "column_break_hbki",
   "estimated_value",
   "document_proofs",
-  "section_break_jygn",
-  "loan_process_status",
-  "loan_disbursement_date",
-  "reason_for_rejection"
+  "tab_4_tab",
+  "joint_applicants_details_section",
+  "joint_applicants",
+  "nominee_details_section",
+  "nominees"
  ],
  "fields": [
   {
@@ -72,13 +76,15 @@
    "fetch_from": "applicant_id.customer_name",
    "fieldname": "applicant_name",
    "fieldtype": "Data",
-   "label": "Applicant Name"
+   "label": "Applicant Name",
+   "read_only": 1
   },
   {
    "fetch_from": "applicant_id.address",
    "fieldname": "applicant_address",
    "fieldtype": "Small Text",
-   "label": "Applicant Address"
+   "label": "Applicant Address",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_tfew",
@@ -88,27 +94,31 @@
    "fetch_from": "applicant_id.account_number",
    "fieldname": "account_number",
    "fieldtype": "Data",
-   "label": "Account Number"
+   "label": "Account Number",
+   "read_only": 1
   },
   {
    "fetch_from": "applicant_id.customer_email",
    "fieldname": "applicant_email",
    "fieldtype": "Data",
    "label": "Applicant Email",
-   "options": "Email"
+   "options": "Email",
+   "read_only": 1
   },
   {
    "fetch_from": "applicant_name.salary",
    "fieldname": "applicant_salary",
    "fieldtype": "Currency",
    "label": "Applicant Salary",
-   "length": 18
+   "length": 18,
+   "read_only": 1
   },
   {
    "fetch_from": "applicant_id.credit_score",
    "fieldname": "credit_score",
    "fieldtype": "Int",
-   "label": "Credit Score"
+   "label": "Credit Score",
+   "read_only": 1
   },
   {
    "fieldname": "amended_from",
@@ -157,7 +167,8 @@
    "fieldname": "nominees",
    "fieldtype": "Table",
    "label": "Nominee",
-   "options": "Nominee Table"
+   "options": "Nominee Table",
+   "reqd": 1
   },
   {
    "fieldname": "loan_product",
@@ -190,7 +201,8 @@
    "default": "1",
    "fieldname": "eligible",
    "fieldtype": "Check",
-   "label": "Eligible"
+   "label": "Eligible",
+   "read_only": 1
   },
   {
    "allow_on_submit": 1,
@@ -213,7 +225,7 @@
    "fieldname": "sanction_amount",
    "fieldtype": "Currency",
    "label": "Sanction Amount",
-   "read_only_depends_on": "eval:doc.loan_process_status!='Verified'"
+   "permlevel": 2
   },
   {
    "fieldname": "primary_securities_section",
@@ -254,30 +266,55 @@
    "fieldname": "loan_process_status",
    "fieldtype": "Select",
    "label": "Loan Process Status",
-   "options": "Draft\nPending Verification\nVerified\nSanctioned\nDisbursed\nClosed\nRejected"
+   "options": "Draft\nPending Verification\nVerified\nSanctioned\nDisbursed\nClosed\nRejected",
+   "read_only": 1
   },
   {
    "fetch_from": "applicant_id.occupation",
    "fieldname": "occupation",
    "fieldtype": "Select",
    "label": "Occupation",
-   "options": "Salaried\nSelf-Employed\nProfessional\nAgricultural\nRetired\nStudent\nUnemployed\nOther"
-  },
-  {
-   "fieldname": "reason_for_rejection",
-   "fieldtype": "Small Text",
-   "label": "Remarks"
+   "options": "Salaried\nSelf-Employed\nProfessional\nAgricultural\nRetired\nStudent\nUnemployed\nOther",
+   "read_only": 1
   },
   {
    "fieldname": "loan_disbursement_date",
    "fieldtype": "Date",
-   "label": "Loan Disbursement Date"
+   "label": "Loan Disbursement Date",
+   "read_only": 1
   },
   {
    "fieldname": "sanction",
    "fieldtype": "Float",
    "hidden": 1,
-   "label": "Sanction"
+   "label": "Sanction",
+   "read_only_depends_on": "eval : frm.doc.loan_process_status!=Verified"
+  },
+  {
+   "fieldname": "tab_2_tab",
+   "fieldtype": "Tab Break",
+   "label": "Applicant Details"
+  },
+  {
+   "fieldname": "tab_3_tab",
+   "fieldtype": "Tab Break",
+   "label": "Loan & Collateral"
+  },
+  {
+   "fieldname": "tab_4_tab",
+   "fieldtype": "Tab Break",
+   "label": "Co-Applicant & Nominee"
+  },
+  {
+   "fieldname": "loan_overview_tab",
+   "fieldtype": "Tab Break",
+   "label": "Loan Details & Status"
+  },
+  {
+   "fieldname": "workflow_remarks",
+   "fieldtype": "Small Text",
+   "hidden": 1,
+   "label": "Workflow Remarks"
   }
  ],
  "grid_page_length": 50,
@@ -293,24 +330,12 @@
    "link_fieldname": "loan_application_id"
   }
  ],
- "modified": "2026-03-27 15:49:00.803988",
+ "modified": "2026-03-30 10:36:34.001903",
  "modified_by": "Administrator",
  "module": "Loan Management",
  "name": "Loan Application",
  "owner": "Administrator",
  "permissions": [
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "Checker",
-   "share": 1,
-   "write": 1
-  },
   {
    "create": 1,
    "delete": 1,
@@ -336,20 +361,8 @@
    "write": 1
   },
   {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "Sanctioner",
-   "share": 1,
-   "submit": 1,
-   "write": 1
-  },
-  {
-   "create": 1,
+   "amend": 1,
+   "cancel": 1,
    "delete": 1,
    "email": 1,
    "export": 1,
@@ -357,6 +370,49 @@
    "read": 1,
    "report": 1,
    "role": "Bank Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Checker",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "permlevel": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Checker",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sanctioner",
+   "share": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "permlevel": 2,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sanctioner",
    "share": 1,
    "write": 1
   }
