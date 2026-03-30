@@ -48,9 +48,9 @@ class LoanApplication(Document):
         if self.loan_process_status=='Disbursed':
             self.emi_log_creation()
 
-    def emi_log_creation(self):
 
-        
+    def emi_log_creation(self):
+    
         paid_total_amount=0
         completed_payments=0
         P=self.sanction_amount
@@ -63,8 +63,6 @@ class LoanApplication(Document):
         emi=round(emi,2)
 
         due=add_months(self.loan_disbursement_date,1)
-
-
 
         emi_log=frappe.db.exists("EMI",{'loan_application_id':self.name})
         if not emi_log:
@@ -89,15 +87,6 @@ def bank(doc):
     
     return branch_names
 
-# import json
-
-# @frappe.whitelist(allow_guest=True)
-# def bank(doc):
-#     doc = json.loads(doc)  # convert string to dict
-    
-#     frappe.log_error("Full Doc", str(doc))
-#     frappe.log_error("Bank Name", doc.get("bank_name"))
-
 
 @frappe.whitelist()
 def get_workflow_history(doctype, docname):
@@ -113,7 +102,6 @@ def get_workflow_history(doctype, docname):
         fields=["application_status", "date", "remarks", "owner"],
         order_by="date desc"   
     )
-
     last_state = None
 
     for action in all_action:
@@ -121,7 +109,6 @@ def get_workflow_history(doctype, docname):
 
         if not to_state:
             continue
-
         if last_state == to_state:
             continue
 
@@ -136,5 +123,4 @@ def get_workflow_history(doctype, docname):
 
         last_state = to_state
     
-
     return history

@@ -1,18 +1,6 @@
 frappe.ui.form.on("Loan Application", {
+
     
-
-    // setup :function(frm){
-    //     roles=frappe.get_roles(frm.doc.owner)
-
-    //     if('Checker' in roles )
-    //     {
-    //         frm.set_read_only(true)
-    //     }
-
-
-    // },
-
-
 
     bank_name: function (frm) {
 
@@ -103,19 +91,7 @@ frappe.ui.form.on("Loan Application", {
             for (let field of list){
                 frm.set_df_property(field,'read_only',1)
             }
-            frm.set_df_property('sanction_amount','read_only',0)
-        //     console.log("sa")
-        //     frm.set_read_only();
-        //     setTimeout(()=>{
-        //         let field = frm.fields_dict['sanction_amount'];
-
-        // if (field) {
-        //     field.df.read_only = 0;
-        //     field.refresh();
-        // }
-        //     },200)
-            
-            
+            frm.set_df_property('sanction_amount','read_only',0)        
             
         }
     },

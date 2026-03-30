@@ -107,11 +107,10 @@
    "read_only": 1
   },
   {
-   "fetch_from": "applicant_name.salary",
+   "fetch_from": "applicant_id.salary",
    "fieldname": "applicant_salary",
    "fieldtype": "Currency",
    "label": "Applicant Salary",
-   "length": 18,
    "read_only": 1
   },
   {
@@ -146,7 +145,8 @@
    "fetch_from": "loan_product.category_name",
    "fieldname": "loan_category_type",
    "fieldtype": "Data",
-   "label": "Loan Category Name"
+   "label": "Loan Category Name",
+   "read_only": 1
   },
   {
    "fieldname": "joint_applicants_details_section",
@@ -184,7 +184,7 @@
    "fieldname": "interest_rate",
    "fieldtype": "Percent",
    "label": "Interest Rate",
-   "reqd": 1
+   "read_only": 1
   },
   {
    "description": "Set Tenure in years",
@@ -341,7 +341,7 @@
    "link_fieldname": "loan_application_id"
   }
  ],
- "modified": "2026-03-30 17:45:32.901029",
+ "modified": "2026-03-30 20:57:56.033617",
  "modified_by": "Administrator",
  "module": "Loan Management",
  "name": "Loan Application",

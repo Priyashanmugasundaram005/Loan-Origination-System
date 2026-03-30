@@ -11,7 +11,7 @@ frappe.ui.form.on("User",{
             callback: function (r) {
 
                 let branch = r.message || [];
-                console.log(branch);
+                
 
                 frm.set_query('branch_name', () => {
                     if (!branch.length) {
