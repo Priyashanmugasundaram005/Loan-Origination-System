@@ -5,6 +5,7 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "workflow_state",
   "loan_overview_tab",
   "bank_details_section",
   "bank_name",
@@ -225,7 +226,7 @@
    "fieldname": "sanction_amount",
    "fieldtype": "Currency",
    "label": "Sanction Amount",
-   "permlevel": 2
+   "read_only": 1
   },
   {
    "fieldname": "primary_securities_section",
@@ -266,8 +267,7 @@
    "fieldname": "loan_process_status",
    "fieldtype": "Select",
    "label": "Loan Process Status",
-   "options": "Draft\nPending Verification\nVerified\nSanctioned\nDisbursed\nClosed\nRejected",
-   "read_only": 1
+   "options": "Draft\nPending Verification\nVerified\nSanctioned\nDisbursed\nClosed\nRejected"
   },
   {
    "fetch_from": "applicant_id.occupation",
@@ -296,9 +296,11 @@
    "label": "Applicant Details"
   },
   {
+   "default": "0",
    "fieldname": "tab_3_tab",
    "fieldtype": "Tab Break",
-   "label": "Loan & Collateral"
+   "label": "Loan & Collateral",
+   "read_only": 1
   },
   {
    "fieldname": "tab_4_tab",
@@ -309,6 +311,15 @@
    "fieldname": "loan_overview_tab",
    "fieldtype": "Tab Break",
    "label": "Loan Details & Status"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "workflow_state",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Workflow State",
+   "no_copy": 1,
+   "options": "Workflow State"
   },
   {
    "fieldname": "workflow_remarks",
@@ -330,7 +341,7 @@
    "link_fieldname": "loan_application_id"
   }
  ],
- "modified": "2026-03-30 10:36:34.001903",
+ "modified": "2026-03-30 17:45:32.901029",
  "modified_by": "Administrator",
  "module": "Loan Management",
  "name": "Loan Application",
@@ -385,30 +396,8 @@
    "write": 1
   },
   {
-   "delete": 1,
    "email": 1,
    "export": 1,
-   "permlevel": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "Checker",
-   "share": 1,
-   "write": 1
-  },
-  {
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "Sanctioner",
-   "share": 1
-  },
-  {
-   "email": 1,
-   "export": 1,
-   "permlevel": 2,
    "print": 1,
    "read": 1,
    "report": 1,

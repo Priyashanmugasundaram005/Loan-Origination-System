@@ -8,8 +8,7 @@
  "field_order": [
   "bank_name",
   "short_name",
-  "main_branch",
-  "bank_manager"
+  "main_branch"
  ],
  "fields": [
   {
@@ -28,18 +27,12 @@
    "fieldtype": "Link",
    "label": "Main Branch",
    "options": "Branch"
-  },
-  {
-   "fieldname": "bank_manager",
-   "fieldtype": "Link",
-   "label": "Bank Manager",
-   "options": "User"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-27 15:24:15.445205",
+ "modified": "2026-03-30 15:56:18.270604",
  "modified_by": "Administrator",
  "module": "Loan Management",
  "name": "Bank",

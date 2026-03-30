@@ -24,24 +24,24 @@ app_license = "mit"
 # Includes in <head>
 # ------------------
 fixtures=[
-    
-    {
-        'dt':'Role',
-        filter:['name','in',['Maker','Checker','Sanctioner']]
+	
+    # {
+    #     'dt':'Role',
+    #     filter:['name','in',['Maker','Checker','Sanctioner']]
         
-    }, 
-    "Property Setter",
-    "Workspace",
-    "Dashboard",
-	"Email Account",
-	"Notification",
-	"User",
-    "Workflow",
-	"Workflow State",
-	"Workflow Action",
-    "Number Card",
-	"Dashboard Chart",
-	"Report"
+    # }, 
+    # "Property Setter",
+    # "Workspace",
+    # "Dashboard",
+	# "Email Account",
+	# "Notification",
+	# "User",
+    # "Workflow",
+	# "Workflow State",
+	# "Workflow Action",
+    # "Number Card",
+	# "Dashboard Chart",
+	# "Report"
     
     
 
@@ -50,7 +50,7 @@ fixtures=[
 ]
 # include js, css files in header of desk.html
 # app_include_css = "/assets/los/css/los.css"
-# app_include_js = "/assets/los/js/los.js"
+# app_include_js = "/assets/los/js/los.bundle.js"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/los/css/los.css"
@@ -67,7 +67,7 @@ fixtures=[
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-# doctype_js = {"doctype" : "public/js/doctype.js"}
+doctype_js = {"User" : "public/js/custom_functions.js"}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}

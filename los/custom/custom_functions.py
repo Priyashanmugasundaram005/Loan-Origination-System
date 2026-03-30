@@ -80,44 +80,38 @@ def get_emi_email_template(applicant, emi, url):
         
 
 def permission_query_conditions(user):
+
     if user == "Administrator":
         return ""
-    
 
     roles = frappe.get_roles(user)
-    bank_condition = f"""
-        `tabLoan Application`.bank_name IN (
-            SELECT name FROM `tabBank`
-            WHERE bank_manager = {frappe.db.escape(user)}
-            
-        )
-    """
-    
 
-    if 'Bank Manager' in roles:
-        
-        return bank_condition
-    
-    branch_condition = f"""
-        `tabLoan Application`.branch_name IN (
-            SELECT name FROM `tabBranch`
-            WHERE maker = {frappe.db.escape(user)}
-            OR checker = {frappe.db.escape(user)}
-            OR sanctioner = {frappe.db.escape(user)}
-        )
-    """
+    user_bank = frappe.db.get_value("User", user, "bank_name")
+    user_branch = frappe.db.get_value("User", user, "branch_name")
 
-    if "Maker" in roles :
+    user_bank = frappe.db.escape(user_bank) if user_bank else None
+    user_branch = frappe.db.escape(user_branch) if user_branch else None
+
+    if "Bank Manager" in roles and user_bank:
+        return f"`tabLoan Application`.bank_name = {user_bank}"
+
+    branch_condition = ""
+    if user_branch:
+        branch_condition = f"`tabLoan Application`.branch_name = {user_branch}"
+
+    if "Maker" in roles:
         return branch_condition
 
     elif "Checker" in roles:
         return f"""
-        {branch_condition} AND `tabLoan Application`.loan_process_status = 'Pending Verification'
+            {branch_condition}
+            AND `tabLoan Application`.loan_process_status = 'Pending Verification'
         """
 
     elif "Sanctioner" in roles:
         return f"""
-        {branch_condition} AND `tabLoan Application`.loan_process_status IN ('Verified', 'Sanctioned')
+            {branch_condition}
+            AND `tabLoan Application`.loan_process_status IN ('Verified', 'Sanctioned')
         """
 
     return "1=0"
@@ -126,15 +120,24 @@ def permission_query_conditions(user):
 def has_permission(doc,user):
     if not user:
         user=frappe.session.user
-    managers=frappe.get_value("Bank",doc.bank_name,'bank_manager')
-    if user ==managers:
-        return True
 
     if user=='Administrator':
          return ""
-    workers=frappe.get_doc("Branch",doc.branch_name)
-    if user in [workers.maker,workers.checker,workers.sanctioner]:
-         return True
+    
+    roles = frappe.get_roles(user)
+
+    user_bank = frappe.db.get_value("User", user, "bank_name")
+    user_branch = frappe.db.get_value("User", user, "branch_name")
+
+    if "Bank Manager" in roles:
+        if doc.bank_name == user_bank:
+            return True
+
+    if any(role in roles for role in ["Maker", "Checker", "Sanctioner"]):
+        if doc.branch_name == user_branch:
+            return True
+
+    return False
 
 
 def penalty_calculation_reminder():
@@ -297,7 +300,15 @@ def get_loan_type_chart():
             }
         ]
     }     
-             
+
+@frappe.whitelist(allow_guest=True)
+def bank(doc):
+    frappe.log_error("bbbbbb",doc)
+    
+    branch_names=frappe.get_all("Branch",{'bank_name':doc},pluck="name")
+    frappe.log_error("beee",branch_names)
+    
+    return branch_names      
                 
             
         

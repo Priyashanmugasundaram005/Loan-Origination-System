@@ -12,9 +12,6 @@
   "branch_email",
   "branch_address",
   "branch_phone_number",
-  "maker",
-  "checker",
-  "sanctioner",
   "is_active"
  ],
  "fields": [
@@ -59,33 +56,12 @@
    "fieldtype": "Link",
    "label": "Bank Name",
    "options": "Bank"
-  },
-  {
-   "description": "User should have maker permission.",
-   "fieldname": "maker",
-   "fieldtype": "Link",
-   "label": "Maker",
-   "options": "User"
-  },
-  {
-   "description": "User should have Checker permission.",
-   "fieldname": "checker",
-   "fieldtype": "Link",
-   "label": "Checker",
-   "options": "User"
-  },
-  {
-   "description": "User should have Sanctioner permission.",
-   "fieldname": "sanctioner",
-   "fieldtype": "Link",
-   "label": "Sanctioner",
-   "options": "User"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-27 16:04:25.182445",
+ "modified": "2026-03-30 15:57:22.320289",
  "modified_by": "Administrator",
  "module": "Loan Management",
  "name": "Branch",

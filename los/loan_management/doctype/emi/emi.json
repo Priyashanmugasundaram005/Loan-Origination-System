@@ -26,7 +26,8 @@
    "fieldname": "loan_application_id",
    "fieldtype": "Link",
    "label": "Loan Application ID",
-   "options": "Loan Application"
+   "options": "Loan Application",
+   "read_only": 1
   },
   {
    "fetch_from": "loan_application_id.sanction_amount",
@@ -50,7 +51,8 @@
    "default": "0",
    "fieldname": "paid",
    "fieldtype": "Check",
-   "label": "Paid"
+   "label": "Paid",
+   "read_only": 1
   },
   {
    "fieldname": "principal_amount",
@@ -119,7 +121,7 @@
  "in_create": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-27 16:22:10.991713",
+ "modified": "2026-03-30 17:39:54.150310",
  "modified_by": "Administrator",
  "module": "Loan Management",
  "name": "EMI",
