@@ -27,11 +27,6 @@ class LoanApplication(Document):
     def validate_loan_product(self):
         loan=self.loan_product
         product=frappe.get_doc("Loan Product",loan,as_dict=True)
-        if self.tenure<product.min_tenure:
-            frappe.throw(f"Tenure should be greater than {product.min_tenure}")
-
-        if self.interest_rate<product.min_interest_rate:
-            frappe.throw(f"Minimum Interest Rate is {product.min_interest_rate}")
 
         if not product.min_loan_amount<= self.requesting_amount <= product.max_loan_amount:
             frappe.throw(f"Requesting Loan amount should be in a range of ${product.min_loan_amount:,} - ${product.max_loan_amount:,}") 		
@@ -80,12 +75,31 @@ class LoanApplication(Document):
             new_emi.emi_status='Active'
             new_emi.insert(ignore_permissions=True)
 
-@frappe.whitelist(allow_guest=True)
-def bank(doc):
+@frappe.whitelist()
+def bank_details():
+    bank, branch = frappe.db.get_value(
+        "User",
+        frappe.session.user,
+        ["bank_name", "branch_name"]
+    )
+
+    return {
+        "bank_name": bank,
+        "branch_name": branch
+    }
+
+
+
+
+# @frappe.whitelist(allow_guest=True)
+# def bank(doc):
     
-    branch_names=frappe.get_all("Branch",{'bank_name':doc},pluck="name")
+#     branch_names=frappe.get_all("Branch",{'bank_name':doc},pluck="name")
     
-    return branch_names
+#     return branch_names
+
+    
+
 
 
 @frappe.whitelist()
@@ -100,7 +114,7 @@ def get_workflow_history(doctype, docname):
             "process_type": doctype
         },
         fields=["application_status", "date", "remarks", "owner"],
-        order_by="date desc"   
+        order_by="date asc"   
     )
     last_state = None
 

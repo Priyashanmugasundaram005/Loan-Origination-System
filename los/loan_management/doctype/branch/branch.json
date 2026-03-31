@@ -55,13 +55,14 @@
    "fieldname": "bank_name",
    "fieldtype": "Link",
    "label": "Bank Name",
-   "options": "Bank"
+   "options": "Bank",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-30 15:57:22.320289",
+ "modified": "2026-03-31 16:28:24.299722",
  "modified_by": "Administrator",
  "module": "Loan Management",
  "name": "Branch",

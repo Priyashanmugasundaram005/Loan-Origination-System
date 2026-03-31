@@ -1,6 +1,6 @@
 import frappe
 from frappe.model.document import Document
-from frappe.utils import nowdate,add_days,getdate,today
+from frappe.utils import nowdate,add_days,getdate,now
 
 def make_unpaid():
 	frappe.db.sql("""
@@ -225,7 +225,7 @@ def log(doc,method):
         audit=frappe.new_doc("Audit Log")
         audit.process_type=doc.doctype
         audit.action=method
-        audit.date=today()
+        audit.date=now()
 
         if doc.doctype=='Loan Application':
             audit.loan_application_id=doc.name
@@ -248,17 +248,15 @@ def log(doc,method):
     
 @frappe.whitelist(allow_guest=True)
 def get_status_chart_data():
-    cache_key = "loan_status_distribution"
-    data = frappe.cache.get_value(cache_key)
 
-    if not data:
-        data = frappe.db.sql("""
-            SELECT loan_process_status, COUNT(*) as count
-            FROM `tabLoan Application`
-            GROUP BY loan_process_status
-        """, as_dict=True)
+  
+    data = frappe.db.sql("""
+        SELECT loan_process_status, COUNT(*) as count
+        FROM `tabLoan Application`
+        GROUP BY loan_process_status
+    """, as_dict=True)
 
-        frappe.cache.set_value(cache_key, data, expires_in_sec=300)
+
     labels = []
     values = []
 
@@ -303,10 +301,8 @@ def get_loan_type_chart():
 
 @frappe.whitelist(allow_guest=True)
 def bank(doc):
-    frappe.log_error("bbbbbb",doc)
     
     branch_names=frappe.get_all("Branch",{'bank_name':doc},pluck="name")
-    frappe.log_error("beee",branch_names)
     
     return branch_names      
                 

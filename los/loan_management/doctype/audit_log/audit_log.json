@@ -100,7 +100,7 @@
   },
   {
    "fieldname": "date",
-   "fieldtype": "Date",
+   "fieldtype": "Datetime",
    "label": "Date",
    "read_only": 1
   }
@@ -108,7 +108,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-30 17:41:45.465051",
+ "modified": "2026-03-31 15:41:09.848722",
  "modified_by": "Administrator",
  "module": "Loan Management",
  "name": "Audit Log",
