@@ -1,12 +1,15 @@
 import frappe
 from frappe.model.document import Document
+from frappe.utils.pdf import get_pdf
 from frappe.utils import nowdate,add_days,getdate,now
 
 def make_unpaid():
 	frappe.db.sql("""
-        UPDATE `tabEMI`
-        SET paid = 0
-    """)
+    UPDATE `tabEMI`
+    SET paid = 0
+    WHERE emi_status = 'Closed'
+""")
+frappe.db.commit()
 
 
 
@@ -153,26 +156,42 @@ def penalty_calculation_reminder():
         email,applicant=frappe.get_value("Loan Application",loan,['applicant_email','applicant_name'])
 
         penalty_amount=(emi*penalty_rate)/100
-        exists=frappe.db.exists("Payment Entry",{'loan_application_id':loan})
-        if exists:
-            old=frappe.get_doc("Payment Entry",exists)
-            if pending_emi.get("last_penalty_email_sent"):
-                last_date = getdate(pending_emi.get("last_penalty_email_sent")) 
-
-                if last_date.month == today.month and last_date.year == today.year:
-                    continue 
-
-            old.db_set("penalty", (old.penalty or 0) + penalty_amount)
-            url="/app/payment-entry/"+old.name
-
-        else:
-            new=frappe.new_doc("Payment Entry")
-            new.loan_application_id=loan
-            new.payment_type='Penalty'
-            new.penalty=penalty_amount
-            new.insert(ignore_permissions=True)
+        if pending_emi.get("last_penalty_email_sent"):
+            last_date = getdate(pending_emi.get("last_penalty_email_sent"))
+            if last_date.month == today.month and last_date.year == today.year:
+                continue
+            existing = frappe.db.exists("Payment Entry", {
+            "loan_application_id": loan,
+            "payment_type": "Penalty",
+            "penalty_paid": 0
+        })
             
-            url="/app/payment-entry/"+new.name
+            if existing:
+                doc = frappe.get_doc("Payment Entry", existing)
+
+                
+                doc.penalty = (doc.penalty or 0) + penalty_amount
+                doc.payment_amount = doc.penalty
+
+            else:
+                
+                doc = frappe.new_doc("Payment Entry")
+                doc.loan_application_id = loan
+                doc.payment_type = "Penalty"
+                doc.penalty = penalty_amount
+                doc.payment_amount = penalty_amount
+
+            
+            doc.append("penalty_details", {
+                "date": today,
+                "emi_id": pending_emi.name,
+                "penalty_amount": penalty_amount
+            })
+
+            doc.save(ignore_permissions=True)
+
+            url = f"/app/payment-entry/{doc.name}"
+
 
         frappe.enqueue(
         method=frappe.sendmail,
@@ -194,7 +213,6 @@ def penalty_calculation_reminder():
                 <ul style="list-style:none; padding-left:0;">
                     <li><b>Loan ID:</b> {loan}</li>
                     <li><b>EMI ID:</b> {pending_emi.name}</li>
-                    <li><b>Penalty Amount:</b> ₹{penalty_amount}</li>
                 </ul>
             </div>
 
@@ -218,6 +236,7 @@ def penalty_calculation_reminder():
         </div>
         """)
         frappe.db.set_value("EMI",pending_emi.name,"last_penalty_email_sent",today)
+        
 
 def log(doc,method):
     allowed=['Loan Application','Payment Entry','EMI']
@@ -306,5 +325,17 @@ def bank(doc):
     
     return branch_names      
                 
-            
+
+@frappe.whitelist(allow_guest=True)
+def emi_pdf():
+    emis=frappe.get_all("EMI",{'emi_status':"Active"})
+    for docname in emis:
+        doc=frappe.get_value("EMI",docname.name,'loan_application_id')
+        mail=frappe.get_value("Loan Application",doc,'applicant_email')
+        attachments=[frappe.attach_print("EMI",docname.name,print_format="EMI History")]
+
+
+        frappe.sendmail(recipients=mail,subject="EMI Generation PDF",
+            message="Dear Customer,<br>Please find your EMI details attached.",
+            attachments=attachments)           
         

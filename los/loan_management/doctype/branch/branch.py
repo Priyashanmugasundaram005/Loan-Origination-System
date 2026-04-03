@@ -11,9 +11,11 @@ class Branch(Document):
 	def autoname(self):
 		if self.bank_name:
 			self.name=f"{self.branch_name} - {self.bank_name}"
-	def validate(self):
-		validate_email_address(self.branch_email, throw=True)
-		pattern=pattern = r'^[A-Z]{4}0[A-Z0-9]{6}$'
-		if self.ifsc_code and not re.match(pattern,self.ifsc_code):
-			frappe.throw("Enter a Valid IFSC Code")
+
+@frappe.whitelist(allow_guest=True)		
+def validate(doc):
+	# validate_email_address(self.branch_email, throw=True)
+	pattern=pattern = r'^[A-Z]{4}0[A-Z0-9]{6}$'
+	if doc and not re.match(pattern,doc):
+		frappe.throw("Enter a Valid IFSC Code")
 

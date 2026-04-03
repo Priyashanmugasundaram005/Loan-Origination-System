@@ -311,8 +311,7 @@
   {
    "fieldname": "loan_overview_tab",
    "fieldtype": "Tab Break",
-   "label": "Loan Details & Status",
-   "show_dashboard": 1
+   "label": "Loan Details & Status"
   },
   {
    "allow_on_submit": 1,
@@ -343,8 +342,8 @@
    "link_fieldname": "loan_application_id"
   }
  ],
- "modified": "2026-03-31 16:27:04.678321",
- "modified_by": "Administrator",
+ "modified": "2026-04-01 13:08:55.319211",
+ "modified_by": "yashinishan2005@gmail.com",
  "module": "Loan Management",
  "name": "Loan Application",
  "owner": "Administrator",

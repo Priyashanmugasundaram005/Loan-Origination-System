@@ -190,7 +190,8 @@ scheduler_events = {
 	# 	"los.tasks.monthly"
 	# ],
     "cron":{
-        "0 0 1 * *":["los.custom.custom_functions.make_unpaid"]
+        "0 0 1 * *":["los.custom.custom_functions.make_unpaid"],
+        "0 0 1 1,7 *":["los.custom.custom_functions.emi_pdf"]
     }
 }
 

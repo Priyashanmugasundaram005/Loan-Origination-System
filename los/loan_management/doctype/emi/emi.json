@@ -9,17 +9,21 @@
   "loan_amount",
   "principal_amount",
   "emi_per_month",
-  "due_date",
-  "last_emi_paid_date",
   "payment_completed_months",
   "payment_pending_months",
-  "pending_amount",
-  "pend_card",
-  "amount_paid",
+  "last_emi_paid_date",
   "paid_card",
-  "emi_status",
+  "column_break_tcwy",
+  "amount_paid",
+  "pending_amount",
   "last_penalty_email_sent",
-  "paid"
+  "due_date",
+  "pending_emi_amount",
+  "emi_status",
+  "paid",
+  "pend_card",
+  "section_break_cdne",
+  "emi_payment_history"
  ],
  "fields": [
   {
@@ -115,13 +119,34 @@
    "hidden": 1,
    "label": "Last Penalty Email Sent",
    "read_only": 1
+  },
+  {
+   "fieldname": "pending_emi_amount",
+   "fieldtype": "Currency",
+   "label": "Pending EMI Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_tcwy",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_cdne",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "emi_payment_history",
+   "fieldtype": "Table",
+   "label": "EMi Payment History",
+   "options": "EMI Payment History",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "in_create": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-30 17:39:54.150310",
+ "modified": "2026-04-02 13:51:23.278403",
  "modified_by": "Administrator",
  "module": "Loan Management",
  "name": "EMI",

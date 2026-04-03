@@ -12,6 +12,10 @@ class LoanApplication(Document):
         self.check_eligibility()
         self.validate_loan_product()
         self.db_set("sanction",self.sanction_amount)
+        secure=frappe.get_value("Loan Product Category",self.loan_category_type,'is_secured')
+
+        if secure==1 and self.security_type=='None':
+            frappe.throw("Loan Category is under Secured loan . Provide a Primary Securities")
 
 
     def validate_salary(self):
@@ -37,6 +41,8 @@ class LoanApplication(Document):
             frappe.throw("Sanction Amount Should be Filled")
         if self.loan_process_status=='Closed':
             self.db_set("loan_status",'Closed')
+            frappe.db.set_value("EMI",{'loan_application_id':self.name},{'emi_status':"Closed",'paid':1})
+            
         if self.loan_process_status=='Disbursed':
             self.db_set("loan_disbursement_date",nowdate())
         
@@ -71,6 +77,7 @@ class LoanApplication(Document):
             new_emi.payment_pending_months=N
             new_emi.amount_paid=paid_total_amount
             new_emi.pending_amount=emi*N
+            new_emi.pending_emi_amount=emi
             new_emi.paid=0
             new_emi.emi_status='Active'
             new_emi.insert(ignore_permissions=True)
@@ -135,6 +142,8 @@ def get_workflow_history(doctype, docname):
             "date": action.date
         })
 
+        
+
         last_state = to_state
-    
+    history.reverse()
     return history

@@ -8,7 +8,8 @@
  "field_order": [
   "bank_name",
   "short_name",
-  "main_branch"
+  "main_branch",
+  "bank_logo"
  ],
  "fields": [
   {
@@ -31,12 +32,18 @@
    "fieldtype": "Link",
    "label": "Main Branch",
    "options": "Branch"
+  },
+  {
+   "fieldname": "bank_logo",
+   "fieldtype": "Attach Image",
+   "label": "Bank Logo",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-31 16:27:58.133297",
+ "modified": "2026-04-03 09:57:25.712795",
  "modified_by": "Administrator",
  "module": "Loan Management",
  "name": "Bank",

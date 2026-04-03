@@ -8,7 +8,8 @@
   "category_name",
   "parent_category",
   "description",
-  "status"
+  "status",
+  "is_secured"
  ],
  "fields": [
   {
@@ -35,13 +36,19 @@
    "fieldtype": "Select",
    "label": "Status",
    "options": "Active\nInactive"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_secured",
+   "fieldtype": "Check",
+   "label": "Is Secured"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-23 12:02:36.979124",
- "modified_by": "Administrator",
+ "modified": "2026-04-01 13:24:42.894080",
+ "modified_by": "yashinishan2005@gmail.com",
  "module": "Loan Management",
  "name": "Loan Product Category",
  "owner": "Administrator",

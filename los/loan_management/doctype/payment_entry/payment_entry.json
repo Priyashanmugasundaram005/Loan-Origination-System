@@ -10,8 +10,11 @@
   "balance_principal_amount",
   "penalty",
   "emi_for_this_month",
+  "pending_emi_amount",
   "payment_amount",
-  "amended_from"
+  "amended_from",
+  "penalty_details",
+  "penalty_paid"
  ],
  "fields": [
   {
@@ -62,13 +65,34 @@
    "fieldtype": "Currency",
    "label": "Penalty Amount",
    "read_only": 1
+  },
+  {
+   "depends_on": "eval: doc.payment_type=='Penalty'",
+   "fieldname": "penalty_details",
+   "fieldtype": "Table",
+   "label": "Penalty Details",
+   "options": "Penalty History"
+  },
+  {
+   "default": "0",
+   "fieldname": "penalty_paid",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "Penalty Paid"
+  },
+  {
+   "default": "0",
+   "fieldname": "pending_emi_amount",
+   "fieldtype": "Currency",
+   "label": "Pending EMI Amount",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-03-30 17:40:27.262773",
+ "modified": "2026-04-02 10:51:22.512555",
  "modified_by": "Administrator",
  "module": "Loan Management",
  "name": "Payment Entry",
@@ -84,6 +108,7 @@
    "report": 1,
    "role": "System Manager",
    "share": 1,
+   "submit": 1,
    "write": 1
   }
  ],

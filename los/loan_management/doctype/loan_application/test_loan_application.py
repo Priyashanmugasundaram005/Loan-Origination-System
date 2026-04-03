@@ -36,10 +36,11 @@ def test_applicant():
     customer.insert()
     return customer
 
-# def test_loan_product():
-#     old=frappe.db.exists("Loan Product",{'product_name':"Commercial"})
-#     if old:
-#         return frappe.get_doc("Loan Product")
+def test_loan_product():
+    old=frappe.db.exists("Loan Product",{'product_name':"Commercial"})
+    if old:
+        return frappe.get_doc("Loan Product")
+    
 
 def test_create_loan(bank,branch,applicant,**kwargs):
     
