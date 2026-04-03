@@ -9,20 +9,29 @@
   "loan_amount",
   "principal_amount",
   "emi_per_month",
-  "due_date",
   "payment_completed_months",
   "payment_pending_months",
-  "pending_amount",
+  "last_emi_paid_date",
+  "paid_card",
+  "column_break_tcwy",
   "amount_paid",
+  "pending_amount",
+  "last_penalty_email_sent",
+  "due_date",
+  "pending_emi_amount",
   "emi_status",
-  "paid"
+  "paid",
+  "pend_card",
+  "section_break_cdne",
+  "emi_payment_history"
  ],
  "fields": [
   {
    "fieldname": "loan_application_id",
    "fieldtype": "Link",
    "label": "Loan Application ID",
-   "options": "Loan Application"
+   "options": "Loan Application",
+   "read_only": 1
   },
   {
    "fetch_from": "loan_application_id.sanction_amount",
@@ -33,56 +42,111 @@
   {
    "fieldname": "emi_per_month",
    "fieldtype": "Currency",
-   "label": "EMI per month"
+   "label": "EMI Per Month",
+   "read_only": 1
   },
   {
    "fieldname": "amount_paid",
    "fieldtype": "Currency",
-   "label": "Amount Paid"
+   "label": "Amount Paid",
+   "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "paid",
    "fieldtype": "Check",
-   "label": "Paid"
+   "label": "Paid",
+   "read_only": 1
   },
   {
    "fieldname": "principal_amount",
    "fieldtype": "Currency",
-   "label": "Pending Principal Amount"
+   "label": "Pending Principal Amount",
+   "read_only": 1
   },
   {
    "fieldname": "payment_completed_months",
    "fieldtype": "Int",
-   "label": "Payment Completed months"
+   "label": "Payment Completed Months",
+   "read_only": 1
   },
   {
    "fieldname": "pending_amount",
    "fieldtype": "Currency",
-   "label": "Pending amount"
+   "label": "Pending Amount",
+   "read_only": 1
   },
   {
    "fieldname": "emi_status",
    "fieldtype": "Select",
    "label": "EMI Status",
-   "options": "Active\nClosed"
+   "options": "Active\nClosed",
+   "read_only": 1
   },
   {
    "fieldname": "payment_pending_months",
    "fieldtype": "Int",
-   "label": "Payment Pending Months"
+   "label": "Payment Pending Months",
+   "read_only": 1
   },
   {
    "fieldname": "due_date",
    "fieldtype": "Date",
-   "label": "Due Date"
+   "label": "Due Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "pend_card",
+   "fieldtype": "Float",
+   "hidden": 1,
+   "label": "Pend_card"
+  },
+  {
+   "fieldname": "paid_card",
+   "fieldtype": "Float",
+   "hidden": 1,
+   "label": "Paid_card"
+  },
+  {
+   "fieldname": "last_emi_paid_date",
+   "fieldtype": "Date",
+   "label": "Last EMI Paid Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_penalty_email_sent",
+   "fieldtype": "Date",
+   "hidden": 1,
+   "label": "Last Penalty Email Sent",
+   "read_only": 1
+  },
+  {
+   "fieldname": "pending_emi_amount",
+   "fieldtype": "Currency",
+   "label": "Pending EMI Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_tcwy",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_cdne",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "emi_payment_history",
+   "fieldtype": "Table",
+   "label": "EMi Payment History",
+   "options": "EMI Payment History",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "in_create": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-24 16:59:07.460650",
+ "modified": "2026-04-02 13:51:23.278403",
  "modified_by": "Administrator",
  "module": "Loan Management",
  "name": "EMI",

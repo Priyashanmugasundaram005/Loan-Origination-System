@@ -5,9 +5,16 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "workflow_state",
+  "loan_overview_tab",
   "bank_details_section",
   "bank_name",
   "branch_name",
+  "section_break_jygn",
+  "loan_process_status",
+  "loan_disbursement_date",
+  "workflow_remarks",
+  "tab_2_tab",
   "applicant_details_section",
   "applicant_id",
   "applicant_name",
@@ -19,6 +26,7 @@
   "applicant_salary",
   "credit_score",
   "amended_from",
+  "tab_3_tab",
   "loan_product_details_section",
   "loan_product",
   "loan_category_type",
@@ -29,20 +37,18 @@
   "loan_status",
   "requesting_amount",
   "sanction_amount",
-  "joint_applicants_details_section",
-  "joint_applicants",
-  "nominee_details_section",
-  "nominees",
+  "sanction",
   "primary_securities_section",
   "security_type",
   "security_description",
   "column_break_hbki",
   "estimated_value",
   "document_proofs",
-  "section_break_jygn",
-  "loan_process_status",
-  "loan_disbursement_date",
-  "reason_for_rejection"
+  "tab_4_tab",
+  "joint_applicants_details_section",
+  "joint_applicants",
+  "nominee_details_section",
+  "nominees"
  ],
  "fields": [
   {
@@ -71,13 +77,15 @@
    "fetch_from": "applicant_id.customer_name",
    "fieldname": "applicant_name",
    "fieldtype": "Data",
-   "label": "Applicant Name"
+   "label": "Applicant Name",
+   "read_only": 1
   },
   {
    "fetch_from": "applicant_id.address",
    "fieldname": "applicant_address",
    "fieldtype": "Small Text",
-   "label": "Applicant Address"
+   "label": "Applicant Address",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_tfew",
@@ -87,27 +95,30 @@
    "fetch_from": "applicant_id.account_number",
    "fieldname": "account_number",
    "fieldtype": "Data",
-   "label": "Account Number"
+   "label": "Account Number",
+   "read_only": 1
   },
   {
    "fetch_from": "applicant_id.customer_email",
    "fieldname": "applicant_email",
    "fieldtype": "Data",
    "label": "Applicant Email",
-   "options": "Email"
+   "options": "Email",
+   "read_only": 1
   },
   {
-   "fetch_from": "applicant_name.salary",
+   "fetch_from": "applicant_id.salary",
    "fieldname": "applicant_salary",
    "fieldtype": "Currency",
    "label": "Applicant Salary",
-   "length": 18
+   "read_only": 1
   },
   {
    "fetch_from": "applicant_id.credit_score",
    "fieldname": "credit_score",
    "fieldtype": "Int",
-   "label": "Credit score"
+   "label": "Credit Score",
+   "read_only": 1
   },
   {
    "fieldname": "amended_from",
@@ -123,7 +134,8 @@
    "fieldname": "applicant_id",
    "fieldtype": "Link",
    "label": "Applicant ID",
-   "options": "Customer"
+   "options": "Customer",
+   "reqd": 1
   },
   {
    "fieldname": "loan_product_details_section",
@@ -156,8 +168,9 @@
   {
    "fieldname": "nominees",
    "fieldtype": "Table",
-   "label": "Nominees",
-   "options": "Nominee Table"
+   "label": "Nominee",
+   "options": "Nominee Table",
+   "reqd": 1
   },
   {
    "fieldname": "loan_product",
@@ -168,18 +181,19 @@
    "reqd": 1
   },
   {
+   "fetch_from": "loan_product.min_interest_rate",
    "fieldname": "interest_rate",
    "fieldtype": "Percent",
-   "in_list_view": 1,
    "label": "Interest Rate",
-   "reqd": 1
+   "read_only": 1
   },
   {
    "description": "Set Tenure in years",
    "fetch_from": "loan_product.min_tenure",
    "fieldname": "tenure",
    "fieldtype": "Int",
-   "label": "Tenure"
+   "label": "Tenure",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_ojsl",
@@ -189,7 +203,8 @@
    "default": "1",
    "fieldname": "eligible",
    "fieldtype": "Check",
-   "label": "Eligible"
+   "label": "Eligible",
+   "read_only": 1
   },
   {
    "allow_on_submit": 1,
@@ -212,7 +227,7 @@
    "fieldname": "sanction_amount",
    "fieldtype": "Currency",
    "label": "Sanction Amount",
-   "read_only_depends_on": "eval:doc.loan_process_status!='Verified'"
+   "read_only": 1
   },
   {
    "fieldname": "primary_securities_section",
@@ -260,18 +275,58 @@
    "fieldname": "occupation",
    "fieldtype": "Select",
    "label": "Occupation",
-   "options": "Salaried\nSelf-Employed\nProfessional\nAgricultural\nRetired\nStudent\nUnemployed\nOther"
-  },
-  {
-   "fieldname": "reason_for_rejection",
-   "fieldtype": "Small Text",
-   "label": "Reason For Rejection",
-   "read_only_depends_on": "eval:doc.loan_process_status != \"Pending Verification\" || doc.loan_process_status != \"Verified\""
+   "options": "Salaried\nSelf-Employed\nProfessional\nAgricultural\nRetired\nStudent\nUnemployed\nOther",
+   "read_only": 1
   },
   {
    "fieldname": "loan_disbursement_date",
    "fieldtype": "Date",
-   "label": "Loan Disbursement Date"
+   "label": "Loan Disbursement Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sanction",
+   "fieldtype": "Float",
+   "hidden": 1,
+   "label": "Sanction",
+   "read_only_depends_on": "eval : frm.doc.loan_process_status!=Verified"
+  },
+  {
+   "fieldname": "tab_2_tab",
+   "fieldtype": "Tab Break",
+   "label": "Applicant Details"
+  },
+  {
+   "default": "0",
+   "fieldname": "tab_3_tab",
+   "fieldtype": "Tab Break",
+   "label": "Loan & Collateral",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tab_4_tab",
+   "fieldtype": "Tab Break",
+   "label": "Co-Applicant & Nominee"
+  },
+  {
+   "fieldname": "loan_overview_tab",
+   "fieldtype": "Tab Break",
+   "label": "Loan Details & Status"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "workflow_state",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Workflow State",
+   "no_copy": 1,
+   "options": "Workflow State"
+  },
+  {
+   "fieldname": "workflow_remarks",
+   "fieldtype": "Small Text",
+   "hidden": 1,
+   "label": "Workflow Remarks"
   }
  ],
  "grid_page_length": 50,
@@ -287,8 +342,8 @@
    "link_fieldname": "loan_application_id"
   }
  ],
- "modified": "2026-03-24 21:47:14.019235",
- "modified_by": "Administrator",
+ "modified": "2026-04-01 13:08:55.319211",
+ "modified_by": "yashinishan2005@gmail.com",
  "module": "Loan Management",
  "name": "Loan Application",
  "owner": "Administrator",
@@ -313,25 +368,35 @@
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "Checker",
+   "role": "Maker",
    "share": 1,
    "write": 1
   },
   {
-   "create": 1,
+   "amend": 1,
+   "cancel": 1,
    "delete": 1,
    "email": 1,
    "export": 1,
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "Maker",
+   "role": "Bank Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Checker",
    "share": 1,
    "write": 1
   },
   {
-   "create": 1,
-   "delete": 1,
    "email": 1,
    "export": 1,
    "print": 1,
@@ -339,7 +404,6 @@
    "report": 1,
    "role": "Sanctioner",
    "share": 1,
-   "submit": 1,
    "write": 1
   }
  ],

@@ -23,10 +23,34 @@ app_license = "mit"
 
 # Includes in <head>
 # ------------------
+fixtures=[
+	
+    # {
+    #     'dt':'Role',
+    #     filter:['name','in',['Maker','Checker','Sanctioner']]
+        
+    # }, 
+    # "Property Setter",
+    # "Workspace",
+    # "Dashboard",
+	# "Email Account",
+	# "Notification",
+	# "User",
+    # "Workflow",
+	# "Workflow State",
+	# "Workflow Action",
+    # "Number Card",
+	# "Dashboard Chart",
+	# "Report"
+    
+    
 
+
+    
+]
 # include js, css files in header of desk.html
 # app_include_css = "/assets/los/css/los.css"
-# app_include_js = "/assets/los/js/los.js"
+# app_include_js = "/assets/los/js/los.bundle.js"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/los/css/los.css"
@@ -43,7 +67,7 @@ app_license = "mit"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-# doctype_js = {"doctype" : "public/js/doctype.js"}
+doctype_js = {"User" : "public/js/custom_functions.js"}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -118,12 +142,12 @@ app_license = "mit"
 # Permissions evaluated in scripted ways
 
 permission_query_conditions = {
-	"Loan Application": "los.loan_management.doctype.emi.emi.permission_query_conditions",
+	"Loan Application": "los.custom.custom_functions.permission_query_conditions",
 }
 #
-# has_permission = {
-# 	"Event": "frappe.desk.doctype.event.event.has_permission",
-# }
+has_permission = {
+	"Loan Application": "los.custom.custom_functions.has_permission",
+}
 
 # DocType Class
 # ---------------
@@ -137,13 +161,13 @@ permission_query_conditions = {
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
+doc_events = {
+	"*": {
+		"on_update": "los.custom.custom_functions.log",
+		"on_cancel": "los.custom.custom_functions.log",
+		"on_trash": "los.custom.custom_functions.log"
+	}
+}
 
 # Scheduled Tasks
 # ---------------
@@ -153,7 +177,8 @@ scheduler_events = {
 	# 	"los.tasks.all"
 	# ],
 	"daily": [
-		"los.loan_management.doctype.emi.emi.email_emi_reminder"
+		"los.custom.custom_functions.email_emi_reminder",
+		"los.custom.custom_functions.penalty_calculation_reminder"
 	],
 	# "hourly": [
 	# 	"los.tasks.hourly"
@@ -165,7 +190,8 @@ scheduler_events = {
 	# 	"los.tasks.monthly"
 	# ],
     "cron":{
-        "0 0 1 * *":["los.loan_management.doctype.emi.emi.make_unpaid"]
+        "0 0 1 * *":["los.custom.custom_functions.make_unpaid"],
+        "0 0 1 1,7 *":["los.custom.custom_functions.emi_pdf"]
     }
 }
 

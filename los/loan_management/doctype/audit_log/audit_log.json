@@ -5,10 +5,17 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "process_type",
+  "action",
   "loan_application_id",
   "bank_name",
   "applicant_name",
   "application_status",
+  "date",
+  "emi_status",
+  "emi_amount",
+  "paid_amount",
+  "payment_type",
   "remarks"
  ],
  "fields": [
@@ -16,34 +23,92 @@
    "fieldname": "loan_application_id",
    "fieldtype": "Link",
    "label": "Loan Application ID",
-   "options": "Loan Application"
+   "options": "Loan Application",
+   "read_only": 1
   },
   {
+   "depends_on": "eval:doc.process_type==\"Loan Application\"",
    "fieldname": "bank_name",
    "fieldtype": "Data",
-   "label": "Bank name"
+   "label": "Bank Name",
+   "read_only": 1
   },
   {
+   "depends_on": "eval:doc.process_type==\"Loan Application\"",
    "fieldname": "applicant_name",
    "fieldtype": "Data",
-   "label": "Applicant Name"
+   "label": "Applicant Name",
+   "read_only": 1
   },
   {
+   "depends_on": "eval:doc.process_type==\"Loan Application\"",
    "fieldname": "application_status",
    "fieldtype": "Select",
    "label": "Application Status",
-   "options": "Draft\nPending Verification\nVerified\nSanctioned\nDisbursed\nClosed\nRejected"
+   "options": "Draft\nPending Verification\nVerified\nSanctioned\nDisbursed\nClosed\nRejected",
+   "read_only": 1
   },
   {
    "fieldname": "remarks",
    "fieldtype": "Small Text",
-   "label": "Remarks"
+   "label": "Remarks",
+   "read_only": 1
+  },
+  {
+   "fieldname": "process_type",
+   "fieldtype": "Link",
+   "label": "Process Type",
+   "link_filters": "[[\"DocType\",\"name\",\"in\",[\"Loan Application\",\"Payment Entry\",\"Audit Log\"]]]",
+   "options": "DocType",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.process_type==\"EMI\"",
+   "fieldname": "emi_status",
+   "fieldtype": "Select",
+   "label": "EMI Status",
+   "options": "Active\nClosed",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.process_type==\"Payment Entry\"",
+   "fieldname": "payment_type",
+   "fieldtype": "Select",
+   "label": "Payment Type",
+   "options": "EMI\nPrincipal\nPenalty",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.process_type==\"EMI\"",
+   "fieldname": "emi_amount",
+   "fieldtype": "Currency",
+   "label": "EMI Amount",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.process_type!=\"Loan Application\"",
+   "fieldname": "paid_amount",
+   "fieldtype": "Currency",
+   "label": "Paid Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "action",
+   "fieldtype": "Data",
+   "label": "Action",
+   "read_only": 1
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Datetime",
+   "label": "Date",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-23 12:15:04.240097",
+ "modified": "2026-03-31 15:41:09.848722",
  "modified_by": "Administrator",
  "module": "Loan Management",
  "name": "Audit Log",

@@ -25,20 +25,20 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Category Name",
-   "options": "Loan Product Categories",
+   "options": "Loan Product Category",
    "reqd": 1
   },
   {
    "fieldname": "min_tenure",
    "fieldtype": "Int",
    "in_list_view": 1,
-   "label": "Min Tenure",
+   "label": "Tenure",
    "reqd": 1
   },
   {
    "fieldname": "min_interest_rate",
    "fieldtype": "Percent",
-   "label": "Min Interest rate"
+   "label": "Min Interest Rate"
   },
   {
    "fieldname": "min_loan_amount",
@@ -54,7 +54,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-23 13:32:44.036172",
+ "modified": "2026-03-26 20:30:02.651268",
  "modified_by": "Administrator",
  "module": "Loan Management",
  "name": "Loan Product",

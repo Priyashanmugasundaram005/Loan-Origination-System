@@ -1,0 +1,22 @@
+[
+    {
+      "doctype": "Custom Field",
+      "name": "User-bank",  
+      "dt": "User",
+      "fieldname": "bank_name",
+      "fieldtype": "Link",
+      "insert_after": "username",
+      "label": "Bank Name",
+      "options":"Bank"
+    },
+    {
+      "doctype": "Custom Field",
+      "name": "User-branch",  
+      "dt": "User",
+      "fieldname": "branch_name",
+      "fieldtype": "Link",
+      "insert_after": "bank_name",
+      "label": "Branch Name",
+      "options":"Branch"
+    }
+  ]
